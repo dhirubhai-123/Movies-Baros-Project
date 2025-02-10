@@ -167,12 +167,26 @@ const MoviesDetails = () => {
                     </div>
 
                     {/* Related Youtube Videos */}
-                    {/* <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-4">
                         {
-                            !relatedYoutubeVideos === true ? <LoaderComponent /> :
-                                console.log("From moviesDetails ", relatedYoutubeVideos)
+                            !relatedYoutubeVideos || relatedYoutubeVideos.length === 0 ? (
+                                <div className='mx-auto'>Finding Related YouTube videos...</div>
+                            ) : (
+                                <div className="flex overflow-x-auto space-x-4 scrollbar-none">
+                                    {relatedYoutubeVideos.map((item, index) => (
+                                        <div key={index} className="flex-shrink-0">
+                                            <img
+                                                src={item.thumbnail}
+                                                alt={item.title}
+                                                className="w-48 h-28 object-cover rounded-lg"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            )
                         }
-                    </div> */}
+                    </div>
+
 
                     {/* Trailer */}
                     <div className="mt-4">

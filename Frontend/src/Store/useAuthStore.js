@@ -126,13 +126,13 @@ export const useAuthStore = create((set, get) => ({
                 set({ detailsOfMovie: res.data.movieDetails });
             }
 
-            try{
+            try {
                 const resRelated = await axios.post(`${BASE_URL}/api/movies/getRelatedYoutubeVideos/`, res.data.movieName, { withCredentials: true });
-                
+
                 if (resRelated) {
                     set({ relatedYoutubeVideos: res.data });
                 }
-            }catch(error){
+            } catch (error) {
                 console.log(error);
                 toast.error(error.message);
             }
