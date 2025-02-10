@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthStore } from '../Store/useAuthStore.js';
 import LoaderComponent from "../components/LoaderComponent.jsx";
@@ -6,8 +6,8 @@ import { ExternalLink } from 'lucide-react';
 
 const MoviesDetails = () => {
     const { movieId } = useParams();
-    const { detailsOfMovie, getMovieDetails } = useAuthStore();
-    
+    const { detailsOfMovie, getMovieDetails, relatedYoutubeVideos } = useAuthStore();
+
     const capitalizePlatform = (platform) => {
         return platform.charAt(0).toUpperCase() + platform.slice(1);
     };
@@ -165,6 +165,14 @@ const MoviesDetails = () => {
                             )
                         ))}
                     </div>
+
+                    {/* Related Youtube Videos */}
+                    {/* <div className="flex flex-wrap gap-4">
+                        {
+                            !relatedYoutubeVideos === true ? <LoaderComponent /> :
+                                console.log("From moviesDetails ", relatedYoutubeVideos)
+                        }
+                    </div> */}
 
                     {/* Trailer */}
                     <div className="mt-4">

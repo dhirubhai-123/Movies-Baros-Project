@@ -1,7 +1,6 @@
 import { create } from "zustand"
 import axios from "axios";
 import toast from "react-hot-toast";
-import { data } from "react-router-dom";
 
 const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "/";
 
@@ -17,13 +16,14 @@ export const useAuthStore = create((set, get) => ({
     BaseURL: BASE_URL,
     detailsOfMovie: null,
     detailsOfShow: null,
+    relatedYoutubeVideos: null,
 
     signup: async (data, funct) => {
         // console.log(BASE_URL)
         set({ isSigningUp: true });
         try {
             console.log(data)
-            const res = await axios.post(`${BASE_URL}/api/auth/signup`, data);
+            const res = await axios.post(`${BASE_URL}/api/auth/signup`, data, { withCredentials: true });
             console.log(res.data);
             set({ authUser: res.data });
             toast.success("Account created successfully", res.data);
@@ -103,7 +103,7 @@ export const useAuthStore = create((set, get) => ({
 
     getMoviesForHome: async () => {
         try {
-            const res = await axios.get(`${BASE_URL}/api/movies/getmoviesforhome`);
+            const res = await axios.get(`${BASE_URL}/api/movies/getmoviesforhome`, { withCredentials: true });
             if (!res.data) {
                 toast.error("No data found for Home Page");
             }
@@ -122,7 +122,19 @@ export const useAuthStore = create((set, get) => ({
         try {
             const res = await axios.get(`${BASE_URL}/api/movies/moviedetails/${movieId}`);
             if (res) {
-                set({ detailsOfMovie: res.data.movieDetails })
+                console.log(res.data.relatedYoutubeVideos)
+                set({ detailsOfMovie: res.data.movieDetails });
+            }
+
+            try{
+                const resRelated = await axios.post(`${BASE_URL}/api/movies/getRelatedYoutubeVideos/`, res.data.movieName, { withCredentials: true });
+                
+                if (resRelated) {
+                    set({ relatedYoutubeVideos: res.data });
+                }
+            }catch(error){
+                console.log(error);
+                toast.error(error.message);
             }
 
         } catch (error) {

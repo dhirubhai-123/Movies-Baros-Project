@@ -1,6 +1,5 @@
-import Movie from "../models/movies.model.js"
-import { seedMovies } from "../seeds/movie.seed.js";
-
+import Movie from "../models/movies.model.js";
+import axios from "axios";
 
 export const giveMoviesForHome = async (req, res) => {
     try {
@@ -132,3 +131,32 @@ export const giveMovieDetails = async (req, res) => {
         res.status(500).json({ message: `Internal Server Error in giveMovieDetails` });
     }
 }
+
+export const getRelatedYoutubeVideos = async (req, res) => {
+    const YT_API = process.env.YOUTUBE_API_KEY;
+    try {
+        const { movieName } = req.body;
+        // Make request to YouTube Data API to search for videos related to the movie
+        const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+            params: {
+                part: 'snippet',
+                maxResults: 6, // You can adjust the number of results here
+                q: movieName, // Query with movie title
+                type: 'video', // Only search for videos
+                key: YT_API, // Your YouTube API key
+            },
+        });
+
+        const videos = response.data.items.map((item) => ({
+            title: item.snippet.title,
+            description: item.snippet.description,
+            url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+            thumbnail: item.snippet.thumbnails.high.url,
+        }));
+
+        res.json(videos); // Return the video data as JSON
+    } catch (error) {
+        console.log("Internal Server Error in FindingRelatedYoutubeVideos", error)
+        res.status(500).json({ error: 'Failed to fetch YouTube videos' });
+    }
+} 
