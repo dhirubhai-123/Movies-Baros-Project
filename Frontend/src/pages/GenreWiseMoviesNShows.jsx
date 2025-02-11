@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { PlayCircle, Heart, Star } from 'lucide-react';
+import { useAuthStore } from '../Store/useAuthStore';
+import LoaderComponent from '../components/LoaderComponent';
 
 const GenreWiseMoviesNShows = () => {
     const { genre } = useParams();
     const genreName = genre[0].toUpperCase() + genre.slice(1);
+    const { getGenreWiseMovies, genreWiseMovies } = useAuthStore();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await getGenreWiseMovies(genre);
+        };
+        fetchData();
+    }, [genre]);
+
 
     const handleCardClick = (movieId) => {
         window.open(`/moviedetails/${movieId}`, '_blank');
+    }
+
+    if (!genreWiseMovies) {
+        return <LoaderComponent />
     }
 
     return (
@@ -30,13 +45,14 @@ const GenreWiseMoviesNShows = () => {
             </header>
 
             {/* Movies Grid */}
+
             <div className="container mx-auto px-4 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {Array(12).fill(0).map((_, index) => (
-                        <div key={index} className="card bg-base-100 shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl" onClick={() => handleCardClick(index)}>
+                    {genreWiseMovies.map((item, index) => (
+                        <div key={index} className="card bg-base-100 shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl" onClick={() => handleCardClick(item._id)}>
                             <figure className="relative">
                                 <img
-                                    src="https://images.pexels.com/photos/302820/pexels-photo-302820.jpeg"
+                                    src={item.moviePoster}
                                     alt="Movie Poster"
                                     className="w-full h-64 object-cover"
                                 />
@@ -49,8 +65,8 @@ const GenreWiseMoviesNShows = () => {
                             <div className="card-body p-4">
                                 <div className="flex items-start justify-between">
                                     <h2 className="card-title text-lg">
-                                        Movie Title
-                                        <div className="badge badge-secondary">NEW</div>
+                                        {item.movieName}
+                                        <div className="badge badge-secondary">{item.movieVerdict}</div>
                                     </h2>
                                     <button className="btn btn-ghost btn-sm">
                                         <Heart size={20} className="text-red-500" />
@@ -61,18 +77,17 @@ const GenreWiseMoviesNShows = () => {
                                     {[...Array(5)].map((_, i) => (
                                         <Star key={i} size={16} className="text-yellow-400 fill-current" />
                                     ))}
-                                    <span className="text-sm ml-2">(4.5)</span>
+                                    <span className="text-sm ml-2">{item.movieMovieBarosRating}</span>
                                 </div>
 
                                 <p className="text-sm text-gray-500 line-clamp-3">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    Quisquam, voluptatum. Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Quisquam, voluptatum.
+                                    {item.movieDescription}
                                 </p>
 
                                 <div className="card-actions justify-end mt-3">
-                                    <div className="badge badge-outline">Action</div>
-                                    <div className="badge badge-outline">Adventure</div>
+                                    <div className="badge badge-outline">{item.movieGenre.genre1}</div>
+                                    <div className="badge badge-outline">{item.movieGenre.genre2}</div>
+                                    <div className="badge badge-outline">{item.movieGenre.genre3}</div>
                                 </div>
                             </div>
                         </div>

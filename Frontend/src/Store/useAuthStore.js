@@ -17,6 +17,7 @@ export const useAuthStore = create((set, get) => ({
     detailsOfMovie: null,
     detailsOfShow: null,
     relatedYoutubeVideos: null,
+    genreWiseMovies: null,
 
     signup: async (data, funct) => {
         // console.log(BASE_URL)
@@ -114,6 +115,23 @@ export const useAuthStore = create((set, get) => ({
 
         } catch (error) {
             console.log("Something went wrong in getMoviesForHome, useAuthStore")
+            toast.error(error.response.data.message);
+        }
+    },
+
+    getGenreWiseMovies: async (genreName) => {
+
+        try {
+            const res = await axios.get(`${BASE_URL}/api/movies/${genreName}`, { withCredentials: true });
+
+            if (!res) {
+                toast.error("No response found with ", genreName);
+            }
+
+            set({ genreWiseMovies: res.data.genreMovies })
+
+        } catch (error) {
+            console.log("Something went wrong in getGenreWiseMovies, useAuthStore", error)
             toast.error(error.response.data.message);
         }
     },

@@ -94,16 +94,6 @@ export const genreWiseMovies = async (req, res) => {
                 { 'movieGenre.genre3': movieGenre }
             ]
         })
-        // .exec((Error, movies) => {
-        //     if (err) {
-        //         console.error(Error);
-        //         return res.status(403).json({ message: `something is wrong ${Error}` });
-        //     } else {
-        //         console.log(movies);
-        //         return res.status(200).json({ message: `something is wrong ${movies}` });
-        //     }
-        // })
-        let newArray = genreMovies.map(item => item.movieName);
 
         return res.status(200).json({ message: `movies found for genre: ${movieGenre}`, genreMovies: genreMovies });
 
