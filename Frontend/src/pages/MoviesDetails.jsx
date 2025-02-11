@@ -169,8 +169,8 @@ const MoviesDetails = () => {
                     {/* Related Youtube Videos */}
                     <div className="flex flex-wrap gap-4">
                         {
-                            !relatedYoutubeVideos || relatedYoutubeVideos.length === 0 ? (
-                                <div className='mx-auto'>Finding Related YouTube videos...</div>
+                            !Array.isArray(relatedYoutubeVideos) || relatedYoutubeVideos.length === 0 ? (
+                                <div className='mx-auto animate-bounce'>Finding Related YouTube videos...</div>
                             ) : (
                                 <div className="flex overflow-x-auto space-x-4 scrollbar-none">
                                     {relatedYoutubeVideos.map((item, index) => (
