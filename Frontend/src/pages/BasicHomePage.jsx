@@ -56,6 +56,10 @@ const BasicHomePage = () => {
   //   window.open(`/moviedetails/${movieId}`, '_blank');
   // }
 
+  const handleGenreCardClick = (genreName) => {
+    navigate(`/movies/${genreName}`);
+  }
+
 
   const handleAllCardClick = async () => {
     navigate(`${BaseURL}/movies`)
@@ -281,18 +285,30 @@ const BasicHomePage = () => {
           style={{ scrollbarWidth: 'none' }} // Hide scrollbar
         >
           {/* <Genre_Card_Home genreTitle={"Thriller"} genrePoster={''} /> */}
-          <Genre_Card_Home movieName={"Crime"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/kexgp4dheirctwv1zbdf.jpg'} />
-          <Genre_Card_Home movieName={"Drama"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/r44esiqclgasaam8z5k9.jpg'} />
-          <Genre_Card_Home movieName={"Romantics"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/ogongmbi7yuywkosi909.jpg'} />
-          <Genre_Card_Home movieName={"Sci-Fi"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/k2ftqfjtq8sadlejgyku.jpg'} />
-          <Genre_Card_Home movieName={"Action"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/qjwpsjibjqmilv3er6rd.jpg'} />
-          <Genre_Card_Home movieName={"Animated"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738698223/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/vdlavgcbuwesyubq5ac0.jpg'} />
-          <Genre_Card_Home movieName={"Mystery"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/euybgnngfl12wl3it184.jpg'} />
-          <Genre_Card_Home movieName={"Documentry"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/pmids64xw4gqprgh7nnl.jpg'} />
-          <Genre_Card_Home movieName={"History"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/nnqtczoi1brcgj2wq5vt.jpg'} />
-          <Genre_Card_Home movieName={"Horror"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738699345/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/u7kdqvgjtsfqammask9y.jpg'} />
-          <Genre_Card_Home movieName={"Fantasy"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/hnrlh5lvcvsh0m2x25em.jpg'} />
-          <Genre_Card_Home movieName={"Super-Hero"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/rai2p7o2ia1kkakd6hnf.jpg'} />
+          <Genre_Card_Home movieName={"Crime"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/kexgp4dheirctwv1zbdf.jpg'}
+            onClick={() => handleGenreCardClick("Crime")} />
+          <Genre_Card_Home movieName={"Drama"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/r44esiqclgasaam8z5k9.jpg'}
+            onClick={() => handleGenreCardClick("Drama")} />
+          <Genre_Card_Home movieName={"Romantics"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/ogongmbi7yuywkosi909.jpg'}
+            onClick={() => handleGenreCardClick("Romantics")} />
+          <Genre_Card_Home movieName={"Sci-Fi"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/k2ftqfjtq8sadlejgyku.jpg'}
+            onClick={() => handleGenreCardClick("Sci-Fi")} />
+          <Genre_Card_Home movieName={"Action"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/qjwpsjibjqmilv3er6rd.jpg'}
+            onClick={() => handleGenreCardClick("Action")} />
+          <Genre_Card_Home movieName={"Animated"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738698223/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/vdlavgcbuwesyubq5ac0.jpg'}
+            onClick={() => handleGenreCardClick("Animated")} />
+          <Genre_Card_Home movieName={"Mystery"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/euybgnngfl12wl3it184.jpg'}
+            onClick={() => handleGenreCardClick("Mystery")} />
+          <Genre_Card_Home movieName={"Documentry"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/pmids64xw4gqprgh7nnl.jpg'}
+            onClick={() => handleGenreCardClick("Documentry")} />
+          <Genre_Card_Home movieName={"History"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/nnqtczoi1brcgj2wq5vt.jpg'}
+            onClick={() => handleGenreCardClick("History")} />
+          <Genre_Card_Home movieName={"Horror"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738699345/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/u7kdqvgjtsfqammask9y.jpg'}
+            onClick={() => handleGenreCardClick("Horror")} />
+          <Genre_Card_Home movieName={"Fantasy"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/hnrlh5lvcvsh0m2x25em.jpg'}
+            onClick={() => handleGenreCardClick("Fantasy")} />
+          <Genre_Card_Home movieName={"Super-Hero"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/rai2p7o2ia1kkakd6hnf.jpg'}
+            onClick={() => handleGenreCardClick("Super-Hero")} />
 
         </div>
       </div>

@@ -7,6 +7,7 @@ import { ExternalLink } from 'lucide-react';
 const MoviesDetails = () => {
     const { movieId } = useParams();
     const { detailsOfMovie, getMovieDetails, relatedYoutubeVideos } = useAuthStore();
+    const [timer, updateTimer] = useState(false);
 
     const capitalizePlatform = (platform) => {
         return platform.charAt(0).toUpperCase() + platform.slice(1);
@@ -25,8 +26,41 @@ const MoviesDetails = () => {
         getMovieDetails(movieId);
     }, [movieId]);
 
-    if (!detailsOfMovie) {
+    useEffect(() => {
+        setTimeout(() => {
+            updateTimer(true)
+        }, 8000)
+    })
+
+
+    if (!detailsOfMovie && !timer) {
         return <LoaderComponent />;
+    }
+
+    if (!detailsOfMovie && timer) {
+        return <div className="w-screen h-screen flex justify-center items-center bg-gradient-to-r from-pink-200 via-pink-300 to-pink-500">
+            <div className="text-center">
+                <div className="text-4xl font-semibold text-white mb-4">
+                    <h2>
+                        <div>
+                            Movie Not found ID -
+                        </div>
+                        <div>
+                            {movieId}
+                        </div>
+                    </h2>
+                </div>
+                {/* <div className="bg-white text-center p-6 rounded-lg shadow-xl max-w-sm mx-auto"> */}
+                <p className="text-xl text-gray-700 mb-4 max-w-sm mx-auto">
+                    We're sorry, we couldn't find the movie you're looking for.
+                    Please check the movie ID or try again later.
+                </p>
+                {/* <button className="btn btn-outline btn-pink max-w-1/2 mt-4">
+                    Go Back
+                </button> */}
+                {/* </div> */}
+            </div>
+        </div>
     }
 
     return (

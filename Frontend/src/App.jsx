@@ -13,6 +13,7 @@ import AddMovie from './pages/AddMovie'
 import AddShow from './pages/AddShow'
 import { Toaster } from 'react-hot-toast'
 import MoviesDetails from './pages/MoviesDetails'
+import GenreWiseMoviesNShows from './pages/GenreWiseMoviesNShows'
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/moviesNShow" element={<MoviesNShow />} />
+        <Route path='/movies/:genre' element={<GenreWiseMoviesNShows />} />
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/moviedetails/:movieId" element={<MoviesDetails />} />
 
