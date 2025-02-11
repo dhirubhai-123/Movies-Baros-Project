@@ -10,6 +10,7 @@ import RecomendedCard from "../components/RecomendedCard.jsx"
 import ScrollableCarousel from '../components/ScrollableCarousel.jsx';
 import toast from 'react-hot-toast';
 import { useNavigate, useLocation } from 'react-router-dom';
+import GenreWiseMoviesSortedForHome from '../components/GenreWiseMoviesSortedForHome.jsx';
 
 // const BASE_URL = import.meta.env.NODE_ENV === "development" ? "http://localhost:5000" : "/";
 
@@ -242,9 +243,9 @@ const BasicHomePage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 md:gap-x-2">
 
           {
-            recomendedMovies.map((item, index) => (
+            recomendedMovies.map((item) => (
               <RecomendedCard
-                key={index}
+                key={item._id}  // Use the unique movie ID here
                 imgUrl={`${item.moviePoster}`}
                 name={`${item.movieName}`}
                 verdict={`${item.movieVerdict}`}
@@ -253,8 +254,8 @@ const BasicHomePage = () => {
                 onClick={() => handleCardClick(item._id)}
               />
             ))
-
           }
+
 
         </div>
 
@@ -369,325 +370,29 @@ const BasicHomePage = () => {
 
       {/* Action Thrillers */}
 
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          Action Thrillers
+      <GenreWiseMoviesSortedForHome movies={actionThrillers} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-          <style>{`
-        .hide-scroll-bar::-webkit-scrollbar {
-          display: none;  /* Safari and Chrome */
-        }
-      `}</style>
-        </div>
+      <GenreWiseMoviesSortedForHome movies={drama} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
+      <GenreWiseMoviesSortedForHome movies={romance} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-        <div className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide" ref={scrollRef} style={{ scrollbarWidth: 'none' }}>
+      <GenreWiseMoviesSortedForHome movies={horror} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-          {
-            actionThrillers.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
+      <GenreWiseMoviesSortedForHome movies={fantasy} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-          <Genre_Card_Home onClick={handleAllCardClick} />
+      <GenreWiseMoviesSortedForHome movies={sciFi} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-        </div>
+      <GenreWiseMoviesSortedForHome movies={mystery} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-      </div>
-
-      {/* Drama Movies */}
-
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          High Class Drama Movies
-
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-        </div>
-
-
-        <div
-          className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ scrollbarWidth: 'none' }} // Hide scrollbar
-        >
-          {
-            drama.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
-
-          <Genre_Card_Home onClick={handleAllCardClick} />
-
-
-        </div>
-      </div>
-
-      {/* Horror Movies */}
-
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          Horror Movies
-
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-        </div>
-
-
-        <div
-          className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ scrollbarWidth: 'none' }} // Hide scrollbar
-        >
-          {
-            horror.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
-
-          <Genre_Card_Home onClick={handleAllCardClick} />
-
-
-        </div>
-      </div>
-
-      {/* Animated Movies */}
-
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          Best Animated Movies
-
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-        </div>
-
-
-        <div
-          className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ scrollbarWidth: 'none' }} // Hide scrollbar
-        >
-          {
-            animated.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
-
-          <Genre_Card_Home onClick={handleAllCardClick} />
-
-
-        </div>
-      </div>
-
-      {/* Fantasy Movies */}
-
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          Fantasy Movies
-
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-        </div>
-
-
-        <div
-          className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ scrollbarWidth: 'none' }} // Hide scrollbar
-        >
-          {
-            fantasy.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
-
-          <Genre_Card_Home onClick={handleAllCardClick} />
-
-
-        </div>
-      </div>
-
-      {/* Mystery Movies */}
-
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          Mystery Movies
-
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-        </div>
-
-
-        <div
-          className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ scrollbarWidth: 'none' }} // Hide scrollbar
-        >
-          {
-            mystery.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
-
-          <Genre_Card_Home onClick={handleAllCardClick} />
-
-
-        </div>
-      </div>
-
-      {/* SciFi Movies */}
-
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          SciFi Movies
-
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-        </div>
-
-
-        <div
-          className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ scrollbarWidth: 'none' }} // Hide scrollbar
-        >
-          {
-            sciFi.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
-
-          <Genre_Card_Home onClick={handleAllCardClick} />
-
-
-        </div>
-      </div>
-
-      {/* Romance Movies */}
-
-      <div className='w-full px-2'>
-        <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
-          Romance Movies
-
-          <div className='flex justify-between items-center space-x-2'>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
-            </div>
-            <div className="hover:animate-pulse cursor-pointer">
-              <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
-            </div>
-          </div>
-        </div>
-
-
-        <div
-          className="flex overflow-x-auto space-x-4 p-4 scrollbar-hide"
-          ref={scrollRef}
-          style={{ scrollbarWidth: 'none' }} // Hide scrollbar
-        >
-          {
-            romance.map((movie) => (
-              <Genre_Card_Home
-                genrePoster={movie.moviePoster}
-                movieName={movie.movieName}
-                key={movie._id}
-                movieId={movie._id}
-                onClick={() => handleCardClick(movie._id)}
-              />
-            ))
-          }
-
-          <Genre_Card_Home onClick={handleAllCardClick} />
-
-
-        </div>
-      </div>
+      <GenreWiseMoviesSortedForHome movies={animated} handleAllCardClick={handleAllCardClick}
+        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
 
       {/* Frequently Asked Starts Qustions */}
