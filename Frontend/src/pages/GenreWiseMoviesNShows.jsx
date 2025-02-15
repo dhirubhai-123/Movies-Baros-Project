@@ -3,25 +3,34 @@ import { useParams } from 'react-router-dom';
 import { PlayCircle, Heart, Star } from 'lucide-react';
 import { useAuthStore } from '../Store/useAuthStore';
 import LoaderComponent from '../components/LoaderComponent';
+import { useNavigate } from 'react-router-dom';
 
 const GenreWiseMoviesNShows = () => {
     const { genre } = useParams();
     const genreName = genre[0].toUpperCase() + genre.slice(1);
-    const { getGenreWiseMovies, genreWiseMovies } = useAuthStore();
+    const { getGenreWiseMovies, genreWiseMovies, getGenreWiseShows, genreWiseShows } = useAuthStore();
 
     useEffect(() => {
         const fetchData = async () => {
             await getGenreWiseMovies(genre);
+            await getGenreWiseShows(genre);
         };
         fetchData();
     }, [genre]);
 
+    const roundButtonClicked = (url) => {
+        window.open(url, '_blank');
+    }
 
-    const handleCardClick = (movieId) => {
+    const handleMovieCardClick = (movieId) => {
         window.open(`/moviedetails/${movieId}`, '_blank');
     }
 
-    if (!genreWiseMovies) {
+    const handleShowCardClick = (showId) => {
+        window.open(`/showdetails/${showId}`, '_blank');
+    }
+
+    if (!genreWiseMovies || !genreWiseShows) {
         return <LoaderComponent />
     }
 
@@ -49,7 +58,7 @@ const GenreWiseMoviesNShows = () => {
             <div className="container mx-auto px-4 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {genreWiseMovies.map((item, index) => (
-                        <div key={index} className="card bg-base-100 shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl" onClick={() => handleCardClick(item._id)}>
+                        <div key={index} className="card bg-base-100 shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:cursor-pointer" onClick={() => handleMovieCardClick(item._id)}>
                             <figure className="relative">
                                 <img
                                     src={item.moviePoster}
@@ -58,7 +67,13 @@ const GenreWiseMoviesNShows = () => {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
                                     <button className="absolute bottom-4 right-4 btn btn-circle btn-primary">
-                                        <PlayCircle size={24} />
+                                        <PlayCircle size={24}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                roundButtonClicked(item.movieTrailer)
+                                            }
+                                            }
+                                        />
                                     </button>
                                 </div>
                             </figure>
@@ -88,6 +103,57 @@ const GenreWiseMoviesNShows = () => {
                                     <div className="badge badge-outline">{item.movieGenre.genre1}</div>
                                     <div className="badge badge-outline">{item.movieGenre.genre2}</div>
                                     <div className="badge badge-outline">{item.movieGenre.genre3}</div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {genreWiseShows.map((item, index) => (
+                        <div key={index} className="card bg-base-100 shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:cursor-pointer" onClick={() => handleShowCardClick(item._id)}>
+                            <figure className="relative">
+                                <img
+                                    src={item.showPoster}
+                                    alt="Movie Poster"
+                                    className="w-full h-64 object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
+                                    <button className="absolute bottom-4 right-4 btn btn-circle btn-primary">
+                                        <PlayCircle size={24}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                roundButtonClicked(item.showTrailer)
+                                            }
+                                            }
+                                        />
+                                    </button>
+                                </div>
+                            </figure>
+                            <div className="card-body p-4">
+                                <div className="flex items-start justify-between">
+                                    <h2 className="card-title text-lg">
+                                        {item.showName}
+                                        <div className="badge badge-secondary">{item.showVerdict}</div>
+                                    </h2>
+                                    <button className="btn btn-ghost btn-sm">
+                                        <Heart size={20} className="text-red-500" />
+                                    </button>
+                                </div>
+
+                                <div className="flex items-center gap-1 mb-2">
+                                    {[...Array(5)].map((_, i) => (
+                                        <Star key={i} size={16} className="text-yellow-400 fill-current" />
+                                    ))}
+                                    <span className="text-sm ml-2">{item.showMovieBarosRating}</span>
+                                </div>
+
+                                <p className="text-sm text-gray-500 line-clamp-3">
+                                    {item.movieDescription}
+                                </p>
+
+                                <div className="card-actions justify-end mt-3">
+                                    <div className="badge badge-outline">{item.showGenre.genre1}</div>
+                                    <div className="badge badge-outline">{item.showGenre.genre2}</div>
+                                    <div className="badge badge-outline">{item.showGenre.genre3}</div>
                                 </div>
                             </div>
                         </div>

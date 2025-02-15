@@ -1,5 +1,6 @@
 
-import Show from "../models/shows.model.js"
+import Show from "../models/shows.model.js";
+import axios from "axios";
 
 export const giveShowsForHome = async (req, res) => {
 

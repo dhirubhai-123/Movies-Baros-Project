@@ -38,6 +38,8 @@ export const useAuthStore = create((set, get) => ({
     detailsOfShow: null,
     relatedYoutubeVideos: null,
     genreWiseMovies: null,
+    genreWiseShows: null,
+    
 
     signup: async (data, funct) => {
         // console.log(BASE_URL)
@@ -129,7 +131,7 @@ export const useAuthStore = create((set, get) => ({
                 toast.error("No data found for Home Page");
             }
 
-            toast.success("data found for Home page");
+            // toast.success("data found for Home page");
             // console.log(res.data?.allMovies);
             set({ moviesForHome: res.data.allMovies });
 
@@ -222,7 +224,7 @@ export const useAuthStore = create((set, get) => ({
             const res = await axios.get(`${BASE_URL}/api/shows/showdetails/${showId}`);
             if (res) {
                 console.log(res.data.relatedYoutubeVideos)
-                set({ detailsOfMovie: res.data.movieDetails });
+                set({ detailsOfShow: res.data.showDetails });
             }
 
             try {
