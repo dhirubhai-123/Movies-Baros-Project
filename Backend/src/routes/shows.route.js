@@ -1,11 +1,14 @@
 import express from "express"
-import { giveShowsForHome, addNewShow } from "../controllers/shows.controller.js";
+import { giveShowsForHome, addNewShow, getRelatedYoutubeVideos, genreWiseShows, giveShowDetails } from "../controllers/shows.controller.js";
 import { checkIncomingShow } from "../middleware/shows.middlewear.js";
 
 
-const router = express.Router();
+const showsRouter = express.Router();
 
-router.get("/getshows", giveShowsForHome);
-router.post("/addshow", checkIncomingShow, addNewShow);
+showsRouter.get("/getshowsforhome", giveShowsForHome);
+showsRouter.get("/:genre", genreWiseShows);
+showsRouter.get("/showdetails/:showName", giveShowDetails);
+showsRouter.post("/addshow", checkIncomingShow, addNewShow);
+showsRouter.post("/getRelatedYoutubeVideos", getRelatedYoutubeVideos);
 
-export default router;
+export default showsRouter;

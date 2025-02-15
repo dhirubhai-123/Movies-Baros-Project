@@ -23,6 +23,16 @@ export const useAuthStore = create((set, get) => ({
     animatedMovies: [],
     scifiMovies: [],
 
+    showsForHome: [],
+    dramaShows: [],
+    actionShows: [],
+    horrorShows: [],
+    romanticShows: [],
+    fantasyShows: [],
+    mysteryShows: [],
+    animatedShows: [],
+    scifiShows: [],
+
     BaseURL: BASE_URL,
     detailsOfMovie: null,
     detailsOfShow: null,
@@ -179,7 +189,59 @@ export const useAuthStore = create((set, get) => ({
             toast.error(error.response.data.message);
             console.log(error);
         }
-    }
+    },
+
+    getShowsForHome: async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/api/shows/getshowsforhome`, { withCredentials: true });
+            if (res.data) {
+                set({ showsForHome: res.data.allShows });
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message);
+        }
+    },
+
+    getGenreWiseShows: async (genreName) => {
+        try {
+            const res = await axios.get(`${BASE_URL}/api/shows/${genreName}`, { withCredentials: true });
+
+            if (res.data) {
+                set({ genreWiseShows: res.data.genreShows })
+            }
+        } catch (error) {
+            console.log("Something went wrong in getGenreWiseShows, useAuthStore", error)
+            toast.error(error.response.data.message);
+        }
+
+    },
+
+    getShowDetails: async (showId) => {
+        try {
+            const res = await axios.get(`${BASE_URL}/api/shows/showdetails/${showId}`);
+            if (res) {
+                console.log(res.data.relatedYoutubeVideos)
+                set({ detailsOfMovie: res.data.movieDetails });
+            }
+
+            try {
+                const resRelated = await axios.post(`${BASE_URL}/api/shows/getRelatedYoutubeVideos/`, res.data.showName, { withCredentials: true });
+
+                if (resRelated) {
+                    set({ relatedYoutubeVideos: res.data });
+                }
+            } catch (error) {
+                console.log(error);
+                toast.error(error.message);
+            }
+
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log(error);
+        }
+
+    },
 
 })
 )
