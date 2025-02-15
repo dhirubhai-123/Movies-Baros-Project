@@ -62,7 +62,7 @@ const Navbar = () => {
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    <li><a>Item 1</a></li>
+                    <li><a onClick={() => navigate(`/movies`)} >Movies</a></li>
                     <li>
                         <details>
                             <summary>Parent</summary>
@@ -72,7 +72,7 @@ const Navbar = () => {
                             </ul>
                         </details>
                     </li>
-                    <li><a>Item 3</a></li>
+                    <li><a onClick={() => navigate(`/shows`)} >Shows</a></li>
                 </ul>
             </div>
             <div className="navbar-end">

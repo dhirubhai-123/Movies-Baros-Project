@@ -39,7 +39,7 @@ export const useAuthStore = create((set, get) => ({
     relatedYoutubeVideos: null,
     genreWiseMovies: null,
     genreWiseShows: null,
-    
+
 
     signup: async (data, funct) => {
         // console.log(BASE_URL)
