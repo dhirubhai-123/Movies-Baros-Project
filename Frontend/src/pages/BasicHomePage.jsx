@@ -9,7 +9,7 @@ import Footer from '../components/Footer.jsx';
 import RecomendedCard from "../components/RecomendedCard.jsx"
 import ScrollableCarousel from '../components/ScrollableCarousel.jsx';
 import toast from 'react-hot-toast';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import GenreWiseMoviesSortedForHome from '../components/GenreWiseMoviesSortedForHome.jsx';
 
 // const BASE_URL = import.meta.env.NODE_ENV === "development" ? "http://localhost:5000" : "/";
@@ -35,36 +35,15 @@ const BasicHomePage = () => {
 
   const scrollRef = useRef(null);
 
-  const scrollLeft = () => {
-    scrollRef.current.scrollBy({
-      left: -300, // Adjust scroll distance as needed
-      behavior: 'smooth',
-    });
-  };
-
-  const scrollRight = () => {
-    scrollRef.current.scrollBy({
-      left: 300, // Adjust scroll distance as needed
-      behavior: 'smooth',
-    });
-  };
 
   const handleCardClick = (movieId) => {
     window.open(`/moviedetails/${movieId}`, '_blank');
   }
-  // const handleCardClick = (movieId) => {
-  //   // Open the movie details route in a new tab
-  //   window.open(`/moviedetails/${movieId}`, '_blank');
-  // }
 
   const handleGenreCardClick = (genreName) => {
     navigate(`/movies/${genreName}`);
   }
 
-
-  const handleAllCardClick = async () => {
-    navigate(`${BaseURL}/movies`)
-  }
 
   useEffect(() => {
     async function func() {
@@ -269,14 +248,14 @@ const BasicHomePage = () => {
         <div className='text-xl sm:text-lg md:text-2xl lg:text-3xl px-4 text-white font-semibold text-center flex justify-between items-center'>
           Exlore Our Wide Range of Variety
 
-          <div className='flex justify-between items-center space-x-2'>
+          {/* <div className='flex justify-between items-center space-x-2'>
             <div className="hover:animate-pulse cursor-pointer">
               <ArrowLeft size={32} className="text-blue-500" onClick={scrollLeft} />
             </div>
             <div className="hover:animate-pulse cursor-pointer">
               <ArrowRight size={32} className="text-blue-500" onClick={scrollRight} />
             </div>
-          </div>
+          </div> */}
         </div>
 
 
@@ -370,29 +349,29 @@ const BasicHomePage = () => {
 
       {/* Action Thrillers */}
 
-      <GenreWiseMoviesSortedForHome movies={actionThrillers} handleAllCardClick={handleAllCardClick}
+      <GenreWiseMoviesSortedForHome movies={actionThrillers}
         handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-      <GenreWiseMoviesSortedForHome movies={drama} handleAllCardClick={handleAllCardClick}
-        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
+      <GenreWiseMoviesSortedForHome movies={drama}
+        handleCardClick={handleCardClick} genreName={`Drama`} />
 
-      <GenreWiseMoviesSortedForHome movies={romance} handleAllCardClick={handleAllCardClick}
-        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
+      <GenreWiseMoviesSortedForHome movies={romance}
+        handleCardClick={handleCardClick} genreName={`Romantics`} />
 
-      <GenreWiseMoviesSortedForHome movies={horror} handleAllCardClick={handleAllCardClick}
-        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
+      <GenreWiseMoviesSortedForHome movies={horror}
+        handleCardClick={handleCardClick} genreName={`Horror`} />
 
-      <GenreWiseMoviesSortedForHome movies={fantasy} handleAllCardClick={handleAllCardClick}
-        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
+      <GenreWiseMoviesSortedForHome movies={fantasy}
+        handleCardClick={handleCardClick} genreName={`Fantacies`} />
 
-      <GenreWiseMoviesSortedForHome movies={sciFi} handleAllCardClick={handleAllCardClick}
-        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
+      <GenreWiseMoviesSortedForHome movies={sciFi}
+        handleCardClick={handleCardClick} genreName={`Science-Fiction`} />
 
-      <GenreWiseMoviesSortedForHome movies={mystery} handleAllCardClick={handleAllCardClick}
-        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
+      <GenreWiseMoviesSortedForHome movies={mystery}
+        handleCardClick={handleCardClick} genreName={`Mystery`} />
 
-      <GenreWiseMoviesSortedForHome movies={animated} handleAllCardClick={handleAllCardClick}
-        handleCardClick={handleCardClick} genreName={`Action Thriller`} />
+      <GenreWiseMoviesSortedForHome movies={animated}
+        handleCardClick={handleCardClick} genreName={`Animated`} />
 
 
       {/* Frequently Asked Starts Qustions */}

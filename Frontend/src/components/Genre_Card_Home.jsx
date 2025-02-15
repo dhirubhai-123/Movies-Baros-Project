@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Genre_Card_Home = ({ genrePoster, movieName, movieId, handleCardClick, onClick }) => {
+const Genre_Card_Home = ({ genrePoster, movieName, movieId, onClick }) => {
 
     const navigate = useNavigate();
 
@@ -16,7 +16,6 @@ const Genre_Card_Home = ({ genrePoster, movieName, movieId, handleCardClick, onC
                 />
             </figure>
             <div className="card-body p-4 md:px-8 lg:px-12">
-                {/* <h2 className="card-title text-center">{genreTitle}</h2> */}
 
                 <div className="overflow-hidden">
                     <button className="btn btn-primary w-full mt-4 truncate hover:scale-110 " >
