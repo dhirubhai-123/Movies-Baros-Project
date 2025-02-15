@@ -161,13 +161,15 @@ const MoviesDetails = () => {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="bg-base-200 p-4 rounded-lg">
                                 <h4 className="font-bold text-lg mb-2">Director</h4>
-                                <p>{detailsOfMovie.movieDirector}</p>
+                                <p className='hover:text-blue-500'>
+                                    <a href={`https://en.wikipedia.org/wiki/${detailsOfMovie.movieDirector}`}>{detailsOfMovie.movieDirector}</a>
+                                </p>
                             </div>
                             <div className="bg-base-200 p-4 rounded-lg">
                                 <h4 className="font-bold text-lg mb-2">Star Cast</h4>
                                 <ul className="list-disc pl-4">
                                     {Object.values(detailsOfMovie.movieStarCast).map((member, index) => (
-                                        <li key={index} className="text-sm">{member}</li>
+                                        <a href={`https://en.wikipedia.org/wiki/${member}`}><li key={index} className="text-sm hover:text-blue-500">{member}</li></a>
                                     ))}
                                 </ul>
                             </div>
@@ -175,7 +177,7 @@ const MoviesDetails = () => {
                                 <h4 className="font-bold text-lg mb-2">Crew Cast</h4>
                                 <ul className="list-disc pl-4">
                                     {Object.values(detailsOfMovie.movieCrewCast).map((member, index) => (
-                                        <li key={index} className="text-sm">{member}</li>
+                                        <a href={`https://en.wikipedia.org/wiki/${member}`}><li key={index} className="text-sm hover:text-blue-500">{member}</li></a>
                                     ))}
                                 </ul>
                             </div>
