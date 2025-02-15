@@ -33,7 +33,7 @@ const GenreWiseMoviesNShows = () => {
                     <div className="breadcrumbs text-sm mb-4">
                         <ul>
                             <li><a href="/">Home</a></li>
-                            <li><a href="/genres">Genres</a></li>
+                            <li>Genres</li>
                             <li>{genreName}</li>
                         </ul>
                     </div>
