@@ -12,7 +12,17 @@ export const useAuthStore = create((set, get) => ({
     isLoggingIn: false,
     isLoggingOut: false,
     isProcessing: false,
+
     moviesForHome: [],
+    dramaMovies: [],
+    actionMovies: [],
+    horrorMovies: [],
+    romanticMovies: [],
+    fantasyMovies: [],
+    mysteryMovies: [],
+    animatedMovies: [],
+    scifiMovies: [],
+
     BaseURL: BASE_URL,
     detailsOfMovie: null,
     detailsOfShow: null,
@@ -111,7 +121,17 @@ export const useAuthStore = create((set, get) => ({
 
             toast.success("data found for Home page");
             // console.log(res.data?.allMovies);
-            set({ moviesForHome: res.data.allMovies })
+            set({ moviesForHome: res.data.allMovies });
+
+            set({ dramaMovies: res.data.dramaMovies });
+            set({ actionMovies: res.data.actionMovies });
+            set({ horrorMovies: res.data.horrorMovies });
+            set({ romanticMovies: res.data.romanticMovies });
+            set({ fantasyMovies: res.data.fantasyMovies });
+            set({ mysteryMovies: res.data.mysteryMovies });
+            set({ animatedMovies: res.data.animatedMovies });
+            set({ scifiMovies: res.data.scifiMovies });
+
 
         } catch (error) {
             console.log("Something went wrong in getMoviesForHome, useAuthStore")

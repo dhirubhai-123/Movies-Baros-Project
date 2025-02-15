@@ -3,17 +3,125 @@ import axios from "axios";
 
 export const giveMoviesForHome = async (req, res) => {
     try {
+        let dramaMovies = [];
+        let actionMovies = [];
+        let horrorMovies = [];
+        let romanticMovies = [];
+        let fantasyMovies = [];
+        let mysteryMovies = [];
+        let animatedMovies = [];
+        let scifiMovies = [];
+
         const allMovies = await Movie.find({});
         if (!allMovies) {
             return res.status(403).json({ message: "No movies Found !!" });
         }
 
         // console.log("movies in giveMoviesForHome")
-        // allMovies.forEach(element => {
-        //     console.log("movies in giveMoviesForHome", element.movieName)
+        // allMovies.forEach(movie => {
+        //     // console.log("movies in giveMoviesForHome", movie.movieName)
+        //     if (movie.movieGenre.genre1 === "Drama" || movie.movieGenre.genre2 === "Drama" || movie.movieGenre.genre3 === "Drama") {
+        //         dramaMovies.push(movie);
+        //     }
+        //     if (movie.movieGenre.genre1 === "Action" || movie.movieGenre.genre2 === "Action" || movie.movieGenre.genre3 === "Action") {
+        //         actionMovies.push(movie);
+        //     }
+        //     if (movie.movieGenre.genre1 === "Horror" || movie.movieGenre.genre2 === "Horror" || movie.movieGenre.genre3 === "Horror") {
+        //         horrorMovies.push(movie);
+        //     }
+        //     if (movie.movieGenre.genre1 === "Romance" || movie.movieGenre.genre2 === "Romance" || movie.movieGenre.genre3 === "Romance") {
+        //         romanticMovies.push(movie);
+        //     }
+        //     if (movie.movieGenre.genre1 === "Fantasy" || movie.movieGenre.genre2 === "Fantasy" || movie.movieGenre.genre3 === "Fantasy") {
+        //         fantasyMovies.push(movie);
+        //     }
+        //     if (movie.movieGenre.genre1 === "Mystery" || movie.movieGenre.genre2 === "Mystery" || movie.movieGenre.genre3 === "Mystery") {
+        //         mysteryMovies.push(movie);
+        //     }
+        //     if (movie.movieGenre.genre1 === "Animated" || movie.movieGenre.genre2 === "Animated" || movie.movieGenre.genre3 === "Animated") {
+        //         animatedMovies.push(movie);
+        //     }
+        //     if (movie.movieGenre.genre1 === "SciFi" || movie.movieGenre.genre2 === "SciFi" || movie.movieGenre.genre3 === "SciFi") {
+        //         scifiMovies.push(movie);
+        //     }
         // });
 
-        res.status(200).json({ message: "some movies found ", allMovies })
+        dramaMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Drama" },
+                { 'movieGenre.genre2': "Drama" },
+                { 'movieGenre.genre3': "Drama" }
+            ]
+        })
+
+        actionMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Action" },
+                { 'movieGenre.genre2': "Action" },
+                { 'movieGenre.genre3': "Action" }
+            ]
+        })
+
+        horrorMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Horror" },
+                { 'movieGenre.genre2': "Horror" },
+                { 'movieGenre.genre3': "Horror" }
+            ]
+        })
+
+        romanticMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Romance" },
+                { 'movieGenre.genre2': "Romance" },
+                { 'movieGenre.genre3': "Romance" }
+            ]
+        })
+
+        fantasyMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Fantasy" },
+                { 'movieGenre.genre2': "Fantasy" },
+                { 'movieGenre.genre3': "Fantasy" }
+            ]
+        })
+
+        mysteryMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Mystery" },
+                { 'movieGenre.genre2': "Mystery" },
+                { 'movieGenre.genre3': "Mystery" }
+            ]
+        })
+
+        animatedMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Animation" },
+                { 'movieGenre.genre2': "Animation" },
+                { 'movieGenre.genre3': "Animation" }
+            ]
+        })
+
+        scifiMovies = await Movie.find({
+            $or: [
+                { 'movieGenre.genre1': "Sci-Fi" },
+                { 'movieGenre.genre2': "Sci-Fi" },
+                { 'movieGenre.genre3': "Sci-Fi" }
+            ]
+        })
+
+
+        res.status(200).json({
+            message: "some movies found ", allMovies: allMovies,
+            dramaMovies: dramaMovies,
+            actionMovies: actionMovies,
+            horrorMovies: horrorMovies,
+            romanticMovies: romanticMovies,
+            fantasyMovies: fantasyMovies,
+            mysteryMovies: mysteryMovies,
+            animatedMovies: animatedMovies,
+            scifiMovies: scifiMovies,
+        })
     } catch (error) {
         console.log("Internal Server Error in giveMoviesForHome");
         res.status(500).json({ message: "Internal Server error in giveMoviesForHome" });

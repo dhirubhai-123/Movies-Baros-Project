@@ -1,5 +1,6 @@
 import React, { act, useEffect, useRef, useState, } from 'react'
 import { useAuthStore } from '../Store/useAuthStore.js';
+import LoaderComponent from "../components/LoaderComponent.jsx"
 import { Loader, LoaderCircleIcon, LogOut } from "lucide-react"
 import Navbar from '../components/Navbar.jsx';
 import Genre_Card_Home from '../components/Genre_Card_Home.jsx';
@@ -16,18 +17,27 @@ import GenreWiseMoviesSortedForHome from '../components/GenreWiseMoviesSortedFor
 
 const BasicHomePage = () => {
 
-  const { isLoggingOut, logout, authUser, getMoviesForHome, moviesForHome, BaseURL } = useAuthStore();
+  const { isLoggingOut, logout, authUser, getMoviesForHome, moviesForHome, BaseURL,
+    dramaMovies,
+    actionMovies,
+    horrorMovies,
+    romanticMovies,
+    fantasyMovies,
+    mysteryMovies,
+    animatedMovies,
+    scifiMovies,
+  } = useAuthStore();
 
   const [recomendedMovies, updateRecomendedMovies] = useState([]);
   const [mostRatedGoats, updateMostRatedGoats] = useState([]);
-  const [actionThrillers, updateActionThrillers] = useState([]);
-  const [mystery, updateMystery] = useState([]);
-  const [drama, updateDrama] = useState([]);
-  const [horror, updateHorror] = useState([]);
-  const [romance, updateRomance] = useState([]);
-  const [fantasy, updateFantasy] = useState([]);
-  const [animated, updateAnimated] = useState([]);
-  const [sciFi, updateSciFi] = useState([]);
+  // const [actionThrillers, updateActionThrillers] = useState([]);
+  // const [mystery, updateMystery] = useState([]);
+  // const [drama, updateDrama] = useState([]);
+  // const [horror, updateHorror] = useState([]);
+  // const [romance, updateRomance] = useState([]);
+  // const [fantasy, updateFantasy] = useState([]);
+  // const [animated, updateAnimated] = useState([]);
+  // const [sciFi, updateSciFi] = useState([]);
 
   const navigate = useNavigate();
 
@@ -46,119 +56,52 @@ const BasicHomePage = () => {
 
 
   useEffect(() => {
-    async function func() {
-      await getMoviesForHome();
-      // console.log(moviesForHome)
+
+    try {
+      updateLoading(true);
+
+      async function func() {
+        await getMoviesForHome();
+        // console.log(moviesForHome, dramaMovies)
+      }
+      func();
+    } catch (error) {
+      toast.error(error.message);
     }
-    func();
+    finally {
+      updateLoading(false);
+    }
   }, [])
 
   useEffect(() => {
     try {
       updateLoading(true);
-      if (moviesForHome.length > 0) {
-        const updatedMovies = new Set(recomendedMovies.map(movie => movie.movieName));
-        const newRecomendedMovies = recomendedMovies.slice();
+      // if (moviesForHome.length > 0) {
+      const updatedMovies = new Set(recomendedMovies.map(movie => movie.movieName));
+      const newRecomendedMovies = recomendedMovies.slice();
 
-        const updatedMostRatedGoats = new Set(mostRatedGoats.map(movie => movie.movieName));
-        const newMostRatedGoats = mostRatedGoats.slice();
+      const updatedMostRatedGoats = new Set(mostRatedGoats.map(movie => movie.movieName));
+      const newMostRatedGoats = mostRatedGoats.slice();
 
-        const updatedDrama = new Set(drama.map(movie => movie.movieName));
-        const newDrama = drama.slice();
+      moviesForHome.forEach((item) => {
+        //       //   // Debugging: Log the genres to verify the data
+        //       //   // console.log('Genres for movie:', item.movieName, item.movieGenre);
 
-        const updatedActionThrillers = new Set(actionThrillers.map(movie => movie.movieName));
-        const newActionThrillers = actionThrillers.slice();
+        if (item.movieImdbRating > 7 && item.movieImdbRating <= 8.5 && !updatedMovies.has(item.movieName) && newRecomendedMovies.length < 9) {
+          updatedMovies.add(item.movieName);
+          newRecomendedMovies.push(item);
+        }
+        if (item.movieImdbRating > 8 && item.movieMovieBarosRating > 8) {
+          updatedMostRatedGoats.add(item);
+          newMostRatedGoats.push(item);
+        }
 
-        const updatedFantasy = new Set(fantasy.map(movie => movie.movieName));
-        const newFantasy = fantasy.slice();
+      });
 
-        const updatedMystery = new Set(mystery.map(movie => movie.movieName));
-        const newMystery = mystery.slice();
+      // Update the state with the new categorized movies
+      updateRecomendedMovies(newRecomendedMovies);
+      updateMostRatedGoats(newMostRatedGoats);
 
-        const updatedRomance = new Set(romance.map(movie => movie.movieName));
-        const newRomance = romance.slice();
-
-        const updatedHorror = new Set(horror.map(movie => movie.movieName));
-        const newHorror = horror.slice();
-
-        const updatedAnimated = new Set(animated.map(movie => movie.movieName));
-        const newAnimated = animated.slice();
-
-        const updatedSciFi = new Set(sciFi.map(movie => movie.movieName));
-        const newSciFi = sciFi.slice();
-
-        moviesForHome.forEach((item) => {
-          // Debugging: Log the genres to verify the data
-          console.log('Genres for movie:', item.movieName, item.movieGenre);
-
-          if (item.movieImdbRating > 7 && item.movieImdbRating <= 8.5 && !updatedMovies.has(item.movieName) && newRecomendedMovies.length < 9) {
-            updatedMovies.add(item.movieName);
-            newRecomendedMovies.push(item);
-          }
-          if (item.movieImdbRating > 8 && item.movieMovieBarosRating > 8) {
-            updatedMostRatedGoats.add(item);
-            newMostRatedGoats.push(item);
-          }
-
-          // Ensure genre fields are properly handled, excluding "NA" values
-          const genres = [item.movieGenre.genre1, item.movieGenre.genre2, item.movieGenre.genre3]
-            .filter(genre => genre !== "NA")
-            .map(genre => genre.trim().toLowerCase());
-
-          // Check for action/thriller genre
-          if (genres.includes("action") || genres.includes("thriller") && actionThrillers.length < 10) {
-            updatedActionThrillers.add(item.movieName);
-            newActionThrillers.push(item);
-          }
-          // Check for drama genre
-          if (genres.includes("drama") && drama.length < 10) {
-            updatedDrama.add(item.movieName);
-            newDrama.push(item);
-          }
-          // Check for fantasy genre
-          if (genres.includes("fantasy") && fantasy.length < 10) {
-            updatedFantasy.add(item.movieName);
-            newFantasy.push(item);
-          }
-          // Check for horror genre
-          if (genres.includes("horror") && horror.length < 10) {
-            updatedHorror.add(item.movieName);
-            newHorror.push(item);
-          }
-          // Check for sci-fi genre
-          if (genres.includes("scifi") && sciFi.length < 10) {
-            updatedSciFi.add(item.movieName);
-            newSciFi.push(item);
-          }
-          // Check for romance genre
-          if (genres.includes("romance") && romance.length < 10) {
-            updatedRomance.add(item.movieName);
-            newRomance.push(item);
-          }
-          // Check for mystery genre
-          if (genres.includes("mystery") && mystery.length < 10) {
-            updatedMystery.add(item.movieName);
-            newMystery.push(item);
-          }
-          // Check for animation genre
-          if (genres.includes("animation") && animated.length < 10) {
-            updatedAnimated.add(item.movieName);
-            newAnimated.push(item);
-          }
-        });
-
-        // Update the state with the new categorized movies
-        updateRecomendedMovies(newRecomendedMovies);
-        updateMostRatedGoats(newMostRatedGoats);
-        updateActionThrillers(newActionThrillers)
-        updateHorror(newHorror);
-        updateDrama(newDrama);
-        updateFantasy(newFantasy);
-        updateSciFi(newSciFi);
-        updateMystery(newMystery);
-        updateAnimated(newAnimated);
-        updateRomance(newRomance);
-      }
     } catch (error) {
       toast.error("Sorry, something went wrong!!", error.message)
     } finally {
@@ -166,6 +109,10 @@ const BasicHomePage = () => {
     }
   }, [moviesForHome]);
 
+
+  if (loading) {
+    return <LoaderComponent />
+  }
 
   return (
     <div>
@@ -270,13 +217,13 @@ const BasicHomePage = () => {
           <Genre_Card_Home movieName={"Drama"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/r44esiqclgasaam8z5k9.jpg'}
             onClick={() => handleGenreCardClick("Drama")} />
           <Genre_Card_Home movieName={"Romantics"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/ogongmbi7yuywkosi909.jpg'}
-            onClick={() => handleGenreCardClick("Romantics")} />
+            onClick={() => handleGenreCardClick("Romance")} />
           <Genre_Card_Home movieName={"Sci-Fi"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/k2ftqfjtq8sadlejgyku.jpg'}
             onClick={() => handleGenreCardClick("Sci-Fi")} />
           <Genre_Card_Home movieName={"Action"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/qjwpsjibjqmilv3er6rd.jpg'}
             onClick={() => handleGenreCardClick("Action")} />
           <Genre_Card_Home movieName={"Animated"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738698223/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/vdlavgcbuwesyubq5ac0.jpg'}
-            onClick={() => handleGenreCardClick("Animated")} />
+            onClick={() => handleGenreCardClick("Animation")} />
           <Genre_Card_Home movieName={"Mystery"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697745/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/euybgnngfl12wl3it184.jpg'}
             onClick={() => handleGenreCardClick("Mystery")} />
           <Genre_Card_Home movieName={"Documentry"} genrePoster={'https://res.cloudinary.com/dzsvbfzti/image/upload/v1738697744/MoviesBaros%20Images/MoviesBaros%20Genre%20Posters/pmids64xw4gqprgh7nnl.jpg'}
@@ -295,7 +242,7 @@ const BasicHomePage = () => {
       {/* Generes Ends Here  */}
 
       {/* Scrollable Carousel Starts here */}
-      <ScrollableCarousel mostRatedGoats={mostRatedGoats} />
+      <ScrollableCarousel mostRatedGoats={mostRatedGoats} handleCardClick={handleCardClick} />
       {/* Scrollable Carousel Starts here */}
 
       {/* Cards which shows quotes start here  */}
@@ -349,29 +296,29 @@ const BasicHomePage = () => {
 
       {/* Action Thrillers */}
 
-      <GenreWiseMoviesSortedForHome movies={actionThrillers}
+      <GenreWiseMoviesSortedForHome movies={actionMovies}
         handleCardClick={handleCardClick} genreName={`Action Thriller`} />
 
-      <GenreWiseMoviesSortedForHome movies={drama}
+      <GenreWiseMoviesSortedForHome movies={dramaMovies}
         handleCardClick={handleCardClick} genreName={`Drama`} />
 
-      <GenreWiseMoviesSortedForHome movies={romance}
-        handleCardClick={handleCardClick} genreName={`Romantics`} />
+      <GenreWiseMoviesSortedForHome movies={romanticMovies}
+        handleCardClick={handleCardClick} genreName={`Romance`} />
 
-      <GenreWiseMoviesSortedForHome movies={horror}
+      <GenreWiseMoviesSortedForHome movies={horrorMovies}
         handleCardClick={handleCardClick} genreName={`Horror`} />
 
-      <GenreWiseMoviesSortedForHome movies={fantasy}
-        handleCardClick={handleCardClick} genreName={`Fantacies`} />
+      <GenreWiseMoviesSortedForHome movies={fantasyMovies}
+        handleCardClick={handleCardClick} genreName={`Fantacy`} />
 
-      <GenreWiseMoviesSortedForHome movies={sciFi}
-        handleCardClick={handleCardClick} genreName={`Science-Fiction`} />
+      <GenreWiseMoviesSortedForHome movies={scifiMovies}
+        handleCardClick={handleCardClick} genreName={`Sci-Fi`} />
 
-      <GenreWiseMoviesSortedForHome movies={mystery}
+      <GenreWiseMoviesSortedForHome movies={mysteryMovies}
         handleCardClick={handleCardClick} genreName={`Mystery`} />
 
-      <GenreWiseMoviesSortedForHome movies={animated}
-        handleCardClick={handleCardClick} genreName={`Animated`} />
+      <GenreWiseMoviesSortedForHome movies={animatedMovies}
+        handleCardClick={handleCardClick} genreName={`Animation`} />
 
 
       {/* Frequently Asked Starts Qustions */}
