@@ -34,7 +34,7 @@ const Movies = () => {
     window.open(`/moviedetails/${movieId}`, '_blank');
   }
 
-  if (!moviesForHome) {
+  if (!moviesForHome || loading) {
     return (<LoaderComponent />)
   }
 
