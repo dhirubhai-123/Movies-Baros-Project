@@ -153,7 +153,9 @@ const BasicHomePage = () => {
         </p>
 
         <div className="flex justify-center items-center py-2 relative z-10">
-          <button className="p-2 px-3 text-xl md:text-2xl font-semibold text-white rounded-md bg-red-600 text-center flex justify-center items-center hover:bg-red-700">
+          <button className="p-2 px-3 text-xl md:text-2xl font-semibold text-white rounded-md bg-red-600 text-center flex justify-center items-center hover:bg-red-700"
+            onClick={() => navigate('/movies')}
+          >
             Start Watching
           </button>
         </div>
@@ -261,7 +263,7 @@ const BasicHomePage = () => {
             </div>
             <div className='space-x-4'>
               <button className="relative text-primary-800  text-lg font-medium inline-flex items-center hover:text-yellow-200 hover:left-2 duration-300">
-                <span> Watch Movies →</span>
+                <span onClick={() => navigate('/movies')}> Watch Movies →</span>
               </button>
             </div>
           </div>
@@ -284,7 +286,7 @@ const BasicHomePage = () => {
             </div>
             <div className='space-x-4'>
               <button className="relative text-primary-800  text-lg font-medium inline-flex items-center hover:text-yellow-200 hover:left-2 duration-300">
-                <span> Watch Shows →</span>
+                <span onClick={() => navigate('/shows')}> Watch Shows →</span>
               </button>
             </div>
           </div>
