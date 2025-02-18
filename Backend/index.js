@@ -7,6 +7,7 @@ import showsRouter from "./src/routes/shows.route.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import { seedMovies } from "./src/seeds/movie.seed.js"
+import searchRouter from "./src/routes/search.route.js"
 
 //Middlewares 
 dotenv.config()
@@ -25,7 +26,8 @@ app.use(cookieParser())
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
     res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT'); res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT'); 
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     if (req.method === 'OPTIONS') {
         return res.status(200).json({});
     }
@@ -40,6 +42,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/movies", moviesRouter);
 app.use("/api/shows", showsRouter);
+app.use("/api/search", searchRouter);
 
 
 app.listen(port, () => {
