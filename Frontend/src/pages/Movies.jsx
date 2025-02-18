@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useAuthStore } from '../Store/useAuthStore';
 import LoaderComponent from '../components/LoaderComponent';
 import { PlayCircle, Heart, Star } from 'lucide-react';
+import SearchBar from '../components/SearchBar';
 
 const Movies = () => {
 
@@ -41,12 +42,14 @@ const Movies = () => {
   return (
 
     <div className="min-h-screen bg-gradient-to-b from-base-200 to-base-100">
+      {/* <SearchBar /> */}
       {/* Header Section */}
-      <header className="bg-gradient-to-r from-primary to-accent text-primary-content py-16">
-        <div className="container mx-auto px-4">
-          <div className="breadcrumbs text-sm mb-4">
-            <ul className=''>
-              <li className='text-lg'><a href="/">Home</a></li>
+      <header className="bg-gradient-to-r from-primary to-accent text-primary-content py-8">
+        <div className="container mx-auto px-2">
+          <div className="breadcrumbs text-sm">
+            <ul className='flex flex-col justify-between md:flex-row '>
+              <li className='text-lg mt-6 md:my-0'><a href="/">Home</a></li>
+              <SearchBar />
               {/* <li>Genres</li> */}
               {/* <li>{genreName}</li> */}
             </ul>

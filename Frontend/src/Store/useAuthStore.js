@@ -39,6 +39,7 @@ export const useAuthStore = create((set, get) => ({
     relatedYoutubeVideos: null,
     genreWiseMovies: null,
     genreWiseShows: null,
+    searchSuggestions: [],
 
 
     signup: async (data, funct) => {
@@ -244,6 +245,18 @@ export const useAuthStore = create((set, get) => ({
         }
 
     },
+
+    serachSuggestionFunction: async (inputText) => {
+        try {
+            const res = axios.get(`${BASE_URL}/api/search/searchSuggestions/${inputText}`, { withCredentials: true });
+
+            set({ searchSuggestions: res.data.searchResults });
+
+        } catch (error) {
+            toast.error(error.response.data.message);
+            console.log(error);
+        }
+    }
 
 })
 )
