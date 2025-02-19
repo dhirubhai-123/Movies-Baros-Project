@@ -1,44 +1,52 @@
 import React, { useEffect, useState } from 'react';
+import { useAuthStore } from '../Store/useAuthStore';
+// import { useNavigate } from "react-router-dom";
+// import FilterModalForSearchBar from './FilterModalForSearchBar';
 
 const SearchBar = () => {
+    const { serachSuggestionFunction, movieSearchSuggestions, showSearchSuggestions } = useAuthStore();
     const [inputValue, setInputValue] = useState('');
-    const [newSuggestionArray, updateNewSuggestionArray] = useState([]);
+
+    // const [filterClicked, updateFilterClicked] = useState(false);
+
 
     const handleChange = (e) => {
         setInputValue(e.target.value);
     };
 
-    const suggestionArray = [
-        "The Goat Movie",
-        "The Dangerous Khiladi",
-        "The Khatarnaak Khiladi",
-        "The Internation Khiladi",
-        "The OG Khiladi",
-        "The Goat Khiladi",
-        "The Quality Khiladi",
-    ];
 
-    const matchTheSearch = (inputText) => {
-        const matchedSuggestions = suggestionArray.filter(item =>
-            item.toLowerCase().includes(inputText.toLowerCase())
-        );
-        return matchedSuggestions;
-    };
+    const handleMovieSuggestionClicked = (id) => {
+        window.open(`/moviedetails/${id}`, '_blank');
+    }
+
+    const handleShowSuggestionClicked = (id) => {
+        window.open(`/showdetails/${id}`, '_blank');
+    }
 
     useEffect(() => {
         if (inputValue.trim() !== '') {
-            const newArray = matchTheSearch(inputValue);
-            updateNewSuggestionArray(newArray);
-        } else {
-            updateNewSuggestionArray([]); // Clear suggestions if input is empty
+            // const newArray = matchTheSearch(inputValue);
+            // updateNewSuggestionArray(newArray);
+            const func = async () => {
+                await serachSuggestionFunction(inputValue);
+            }
+            func();
         }
     }, [inputValue]);
 
     return (
         <div className='flex items-center justify-center flex-col absolute top-2 right-2 md:top-10 md:right-10 z-50'>
+
+            {/* Show the Filter if the Button is Clicked */}
+            {/* {
+                filterClicked && <FilterModalForSearchBar click={{ filterClicked, updateFilterClicked }} />
+            } */}
+
             {/* Search Bar */}
             <div className="flex rounded-full bg-[#0d1829] px-2 w-full max-w-[600px]">
-                <button className="self-center flex p-1 cursor-pointer bg-[#0d1829]">
+                {/* <button className="self-center flex p-1 cursor-pointer bg-[#0d1829]"
+                // onClick={() => updateFilterClicked(!filterClicked)}
+                >
                     <svg width="30px" height="30px" viewBox="0 0 24 24" fillRule="none" xmlns="http://www.w3.org/2000/svg" className='hover:invert'>
                         <g id="SVGRepo_bgCarrier" strokeWidth="0" />
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
@@ -48,16 +56,16 @@ const SearchBar = () => {
                             <path d="M12 7.75049C11.5858 7.75049 11.25 8.08627 11.25 8.50049C11.25 8.9147 11.5858 9.25049 12 9.25049V7.75049ZM19 9.25049C19.4142 9.25049 19.75 8.9147 19.75 8.50049C19.75 8.08627 19.4142 7.75049 19 7.75049V9.25049ZM6.857 9.25049C7.27121 9.25049 7.607 8.9147 7.607 8.50049C7.607 8.08627 7.27121 7.75049 6.857 7.75049V9.25049ZM5 7.75049C4.58579 7.75049 4.25 8.08627 4.25 8.50049C4.25 8.9147 4.58579 9.25049 5 9.25049V7.75049ZM12 17.2505C12.4142 17.2505 12.75 16.9147 12.75 16.5005C12.75 16.0863 12.4142 15.7505 12 15.7505V17.2505ZM5 15.7505C4.58579 15.7505 4.25 16.0863 4.25 16.5005C4.25 16.9147 4.58579 17.2505 5 17.2505V15.7505ZM17.143 15.7505C16.7288 15.7505 16.393 16.0863 16.393 16.5005C16.393 16.9147 16.7288 17.2505 17.143 17.2505V15.7505ZM19 17.2505C19.4142 17.2505 19.75 16.9147 19.75 16.5005C19.75 16.0863 19.4142 15.7505 19 15.7505V17.2505ZM12 9.25049H19V7.75049H12V9.25049ZM6.857 7.75049H5V9.25049H6.857V7.75049ZM12 15.7505H5V17.2505H12V15.7505ZM17.143 17.2505H19V15.7505H17.143V17.2505Z" fill="#ff5c5c" />
                         </g>
                     </svg>
-                </button>
+                </button> */}
 
                 <input
                     type="text"
-                    className="w-full bg-[#0d1829] flex bg-transparent pl-2 text-[#cccccc] outline-0"
-                    placeholder="Search name movie or select options"
+                    className="w-full bg-[#0d1829] flex bg-transparent pl-2 text-[#cccccc] outline-0 py-2 px-4 "
+                    placeholder="Search movie / show"
                     onChange={handleChange}
                     value={inputValue}
                 />
-                <button type="submit" className="relative p-2 bg-[#0d1829] rounded-full">
+                {/* <button type="submit" className="relative p-2 bg-[#0d1829] rounded-full">
                     <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="SVGRepo_bgCarrier" strokeWidth="0" />
                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
@@ -65,18 +73,28 @@ const SearchBar = () => {
                             <path d="M14.9536 14.9458L21 21M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="#999" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </g>
                     </svg>
-                </button>
+                </button> */}
             </div>
 
             {/* Suggestions Dropdown */}
-            {inputValue.trim() !== '' && newSuggestionArray.length > 0 && (
+            {inputValue.trim() !== '' && movieSearchSuggestions && showSearchSuggestions && (
                 <div className='relative top-[100%] left-0 z-50 w-full max-w-[600px] bg-[#1A2A3A] rounded-lg shadow-lg border border-[#2A3A4A] max-h-48 overflow-y-auto my-1'> {/* Adjusted colors and shadows */}
-                    {newSuggestionArray.map((item, index) => (
+                    {movieSearchSuggestions.map((item, index) => (
                         <div
                             key={index}
                             className='p-2 text-[#cccccc] hover:bg-[#2A3A4A] cursor-pointer transition-colors duration-200'
+                            onClick={() => handleMovieSuggestionClicked(item._id)}
                         >
-                            {item}
+                            {item.movieName}
+                        </div>
+                    ))}
+                    {showSearchSuggestions.map((item, index) => (
+                        <div
+                            key={index}
+                            className='p-2 text-[#cccccc] hover:bg-[#2A3A4A] cursor-pointer transition-colors duration-200'
+                            onClick={() => { handleShowSuggestionClicked(item._id) }}
+                        >
+                            {item.showName}
                         </div>
                     ))}
                 </div>

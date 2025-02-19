@@ -6,7 +6,7 @@ export const searchSuggestions = async (req, res) => {
 
     // Ensure searchInput is a string and trim whitespace
     if (typeof searchInput !== 'string') {
-        return res.status(400).json({ message: 'Search input must be a string',searchInput });
+        return res.status(400).json({ message: 'Search input must be a string', searchInput });
     }
 
     searchInput = searchInput.trim(); // Remove any leading/trailing spaces
@@ -27,9 +27,9 @@ export const searchSuggestions = async (req, res) => {
         });
 
         // Check if no movies or shows were found
-        if (moviesSearchSuggestions.length === 0 && showSearchSuggestions.length === 0) {
-            return res.status(400).json({ message: `No results found for "${searchInput}"` });
-        }
+        // if (moviesSearchSuggestions.length === 0 && showSearchSuggestions.length === 0) {
+        //     return res.status(400).json({ message: `No results found for "${searchInput}"` });
+        // }
 
         // Return the results
         return res.status(200).json({

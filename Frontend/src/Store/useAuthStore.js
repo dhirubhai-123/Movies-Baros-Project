@@ -39,8 +39,11 @@ export const useAuthStore = create((set, get) => ({
     relatedYoutubeVideos: null,
     genreWiseMovies: null,
     genreWiseShows: null,
-    searchSuggestions: [],
 
+    movieSearchSuggestions: null,
+    showSearchSuggestions: null,
+
+    // sortFilter: null,
 
     signup: async (data, funct) => {
         // console.log(BASE_URL)
@@ -88,6 +91,10 @@ export const useAuthStore = create((set, get) => ({
             set({ isLoggingIn: false });
         }
     },
+
+    // setSortFilter: (value) => {
+    //     set({ sortFilter: value });
+    // },
 
     addMovie: async (data) => {
         set({ isProcessing: true })
@@ -248,9 +255,10 @@ export const useAuthStore = create((set, get) => ({
 
     serachSuggestionFunction: async (inputText) => {
         try {
-            const res = axios.get(`${BASE_URL}/api/search/searchSuggestions/${inputText}`, { withCredentials: true });
+            const res = await axios.get(`${BASE_URL}/api/search/searchSuggestions/${inputText}`, { withCredentials: true });
 
-            set({ searchSuggestions: res.data.searchResults });
+            set({ movieSearchSuggestions: res.data.moviesSearchSuggestions });
+            set({ showSearchSuggestions: res.data.showSearchSuggestions });
 
         } catch (error) {
             toast.error(error.response.data.message);

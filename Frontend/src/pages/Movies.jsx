@@ -6,8 +6,9 @@ import SearchBar from '../components/SearchBar';
 
 const Movies = () => {
 
-  const { getMoviesForHome, moviesForHome } = useAuthStore();
+  const { getMoviesForHome, moviesForHome, sortFilter } = useAuthStore();
   const [loading, updateLoading] = useState(false);
+  const sort = []
 
   useEffect(() => {
 
@@ -26,6 +27,7 @@ const Movies = () => {
       updateLoading(false);
     }
   }, [])
+
 
   const roundButtonClicked = (url) => {
     window.open(url, '_blank');
