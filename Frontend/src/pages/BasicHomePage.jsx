@@ -1,11 +1,9 @@
 import React, { act, useEffect, useRef, useState, } from 'react'
 import { useAuthStore } from '../Store/useAuthStore.js';
 import LoaderComponent from "../components/LoaderComponent.jsx"
-import { Loader, LoaderCircleIcon, LogOut } from "lucide-react"
 import Navbar from '../components/Navbar.jsx';
 import Genre_Card_Home from '../components/Genre_Card_Home.jsx';
 import FNQs from '../components/FNQs.jsx';
-import { ArrowRight, ArrowLeft } from 'lucide-react';
 import Footer from '../components/Footer.jsx';
 import RecomendedCard from "../components/RecomendedCard.jsx"
 import ScrollableCarousel from '../components/ScrollableCarousel.jsx';
@@ -17,7 +15,7 @@ import GenreWiseMoviesSortedForHome from '../components/GenreWiseMoviesSortedFor
 
 const BasicHomePage = () => {
 
-  const { isLoggingOut, logout, authUser, getMoviesForHome, moviesForHome, BaseURL,
+  const { authUser, getMoviesForHome, moviesForHome,
     dramaMovies,
     actionMovies,
     horrorMovies,
@@ -30,14 +28,6 @@ const BasicHomePage = () => {
 
   const [recomendedMovies, updateRecomendedMovies] = useState([]);
   const [mostRatedGoats, updateMostRatedGoats] = useState([]);
-  // const [actionThrillers, updateActionThrillers] = useState([]);
-  // const [mystery, updateMystery] = useState([]);
-  // const [drama, updateDrama] = useState([]);
-  // const [horror, updateHorror] = useState([]);
-  // const [romance, updateRomance] = useState([]);
-  // const [fantasy, updateFantasy] = useState([]);
-  // const [animated, updateAnimated] = useState([]);
-  // const [sciFi, updateSciFi] = useState([]);
 
   const navigate = useNavigate();
 
@@ -54,6 +44,18 @@ const BasicHomePage = () => {
     navigate(`/movies/${genreName}`);
   }
 
+
+  useEffect(() => {
+
+    if (!authUser) {
+      updateLoading(true);
+      setTimeout(() => {
+        navigate("/signup");
+        updateLoading(false);
+      }, 500)
+    }
+    console.log(authUser)
+  }, [authUser])
 
   useEffect(() => {
 
@@ -91,7 +93,7 @@ const BasicHomePage = () => {
           updatedMovies.add(item.movieName);
           newRecomendedMovies.push(item);
         }
-        if (item.movieImdbRating > 8 && item.movieMovieBarosRating > 8) {
+        if (item.movieImdbRating > 8 && item.movieMovieBarosRating > 8 && newMostRatedGoats.length < 8) {
           updatedMostRatedGoats.add(item);
           newMostRatedGoats.push(item);
         }

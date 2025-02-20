@@ -77,7 +77,9 @@ const Navbar = () => {
             </div>
             <div className="navbar-end">
                 <div className="tooltip tooltip-left" data-tip="Logout">
-                    <button className="btn" onClick={logOut}>
+                    <button className="btn"
+                        onClick={logOut}
+                    >
                         <LogOutIcon className='size-6 text-primary' />
                     </button>
                 </div>

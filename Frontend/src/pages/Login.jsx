@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '../Store/useAuthStore.js';
 import toast from 'react-hot-toast';
 import { Loader2 } from "lucide-react"
@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 
 const Login = () => {
 
-  const { isLoggingIn, login } = useAuthStore();
+  const { isLoggingIn, login, authUser } = useAuthStore();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -15,6 +15,9 @@ const Login = () => {
     password: ""
   })
 
+  useEffect(() => {
+    console.log(authUser)
+  }, [])
 
   const validateFormData = (formData) => {
 
