@@ -13,6 +13,7 @@ import GenreWiseMoviesNShows from './pages/GenreWiseMoviesNShows'
 import ShowDetails from './pages/ShowDetails'
 import Movies from './pages/Movies'
 import Shows from './pages/Shows'
+import MoviesFromPlayList from "./components/MoviesFromPlayList"
 
 
 function App() {
@@ -32,6 +33,8 @@ function App() {
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/moviedetails/:movieId" element={<MoviesDetails />} />
         <Route path="/showdetails/:showId" element={<ShowDetails />} />
+        <Route path="/playlist/:playListName" element={<MoviesFromPlayList />} />
+
 
       </Routes>
       <Toaster />

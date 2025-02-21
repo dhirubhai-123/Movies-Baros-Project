@@ -8,7 +8,7 @@ const Movies = () => {
 
   const { getMoviesForHome, moviesForHome, sortFilter } = useAuthStore();
   const [loading, updateLoading] = useState(false);
-  const sort = []
+  // const sort = []
 
   useEffect(() => {
 
