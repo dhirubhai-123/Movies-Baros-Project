@@ -9,11 +9,13 @@ export const addToPlayList = async (req, res) => {
         const playList = await PlayList.findOne({ userId, playListName });
 
         if (!playList) {
-            const playList = new PlayList({
-                playListName: playListName,
-                userId: userId,
-            })
-            await playList.save();
+            // const playList = new PlayList({
+            //     playListName: playListName,
+            //     userId: userId,
+            // })
+            // await playList.save();
+            return res.status(400).json({ message: `No PlayList found with ${userId} & ${playListName}` });
+
         }
 
         if (type === "show" && !playList.movieIds.includes(mediaId)) {
