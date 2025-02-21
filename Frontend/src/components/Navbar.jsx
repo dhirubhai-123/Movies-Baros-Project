@@ -41,13 +41,15 @@ const Navbar = () => {
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow">
                         <li><a onClick={() => navigate(`/movies`)} className='hover:text-red-400 duration-500'>Movies</a></li>
                         <li>
-                            <a className='hover:text-red-400 duration-500'>Parent</a>
-                            <ul className="p-2">
+                            <a className='hover:text-red-400 duration-500'
+                                onClick={() => navigate("/playlists")}
+                            >PlayLists</a>
+                            {/* <ul className="p-2">
                                 <li><a className='hover:text-red-400 duration-500' onClick={() => navigate("/playlist/playlist1")}
-                                >
-                                    First PlayList</a></li>
-                                {/* <li><a className='hover:text-red-400 duration-500'>Submenu 2</a></li> */}
-                            </ul>
+                                > */}
+                            {/* First PlayList</a></li> */}
+                            {/* <li><a className='hover:text-red-400 duration-500'>Submenu 2</a></li> */}
+                            {/* </ul> */}
                         </li>
                         <li><a onClick={() => navigate(`/movies`)} className='hover:text-red-400 duration-500'>Shows</a></li>
                     </ul>
@@ -70,8 +72,8 @@ const Navbar = () => {
                             <summary className='hover:text-red-400 duration-500'>Parent</summary>
                             <ul className="p-2">
                                 <li><a className='hover:text-red-400 duration-500'
-                                    onClick={() => navigate('/playlist/playlist1')}
-                                >Submenu 1</a></li>
+                                    onClick={() => navigate('/playlists')}
+                                >Playlists</a></li>
                                 {/* <li><a className='hover:text-red-400 duration-500'>Submenu 2</a></li> */}
                             </ul>
                         </details>
