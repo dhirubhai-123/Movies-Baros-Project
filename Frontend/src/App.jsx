@@ -14,6 +14,7 @@ import ShowDetails from './pages/ShowDetails'
 import Movies from './pages/Movies'
 import Shows from './pages/Shows'
 import MoviesFromPlayList from "./components/MoviesFromPlayList"
+import PlayLists from "./pages/PlayLists"
 
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
         <Route path="/moviedetails/:movieId" element={<MoviesDetails />} />
         <Route path="/showdetails/:showId" element={<ShowDetails />} />
         <Route path="/playlist/:playListName" element={<MoviesFromPlayList />} />
-
+        <Route path="/playlists" element={<PlayLists />} />
 
       </Routes>
       <Toaster />
