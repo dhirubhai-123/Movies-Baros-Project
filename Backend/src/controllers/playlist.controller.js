@@ -3,6 +3,9 @@ import PlayList from "../models/playlist.model.js"
 
 export const addToPlayList = async (req, res) => {
     const { userId, type, mediaId, playListName } = req.body;
+    if (!userId || !type || !mediaId || !playListName) {
+        return res.status(400).json({ message: "Wrong data provided" });
+    }
 
     try {
 
@@ -37,6 +40,9 @@ export const addToPlayList = async (req, res) => {
 
 export const removeFromPlayList = async (req, res) => {
     const { type, userId, mediaId, playListName } = req.body;
+    if (!userId || !type || !mediaId || !playListName) {
+        return res.status(400).json({ message: "Wrong data provided" });
+    }
 
     try {
 
@@ -96,6 +102,10 @@ export const givePlayListContent = async (req, res) => {
 
 export const giveAllPlayLists = async (req, res) => {
     const { userId } = req.body;
+    if (!userId) {
+        return res.status(400).json({ message: "Wrong data provided" });
+    }
+
     try {
         const allPlayLists = await PlayList.find({ userId: userId });
 
