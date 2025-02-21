@@ -100,6 +100,9 @@ export const giveAllPlayLists = async (req, res) => {
         if (!allPlayLists || allPlayLists.length === 0) {
             return res.status(400).json({ message: `no playlist found with theseId ${userId}` });
         }
+
+        res.status(200).json({ message: `playlist's found with ${userId}`, allPlayLists })
+
     } catch (error) {
         console.log("Internal Server Error, in finding playList with userId")
         res.status(500).json({ message: `Internal Server Error - giveAllPlayLists, ${error.message}` });
