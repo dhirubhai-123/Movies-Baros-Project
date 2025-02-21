@@ -12,11 +12,6 @@ export const addToPlayList = async (req, res) => {
         const playList = await PlayList.findOne({ userId, playListName });
 
         if (!playList) {
-            // const playList = new PlayList({
-            //     playListName: playListName,
-            //     userId: userId,
-            // })
-            // await playList.save();
             return res.status(400).json({ message: `No PlayList found with ${userId} & ${playListName}` });
 
         }
@@ -33,7 +28,7 @@ export const addToPlayList = async (req, res) => {
 
     } catch (error) {
         console.log("Internal Server Error,", error);
-        return res.status(500).json({ message: "Internal Server Error in Adding media into Playlist" })
+        res.status(500).json({ message: "Internal Server Error in Adding media into Playlist" })
     }
 
 }
@@ -74,10 +69,9 @@ export const removeFromPlayList = async (req, res) => {
 
 export const givePlayListContent = async (req, res) => {
 
-    const playListName = req.params.playListName;
+    const { userId, playListName } = req.body;
     let moviesInPlayList = [];
     let showsInPlayList = [];
-    const { userId } = req.body;
 
     try {
         const playList = await PlayList.find({
@@ -118,5 +112,58 @@ export const giveAllPlayLists = async (req, res) => {
     } catch (error) {
         console.log("Internal Server Error, in finding playList with userId")
         res.status(500).json({ message: `Internal Server Error - giveAllPlayLists, ${error.message}` });
+    }
+}
+
+export const createPlayList = async (req, res) => {
+
+    const { userId, playListName } = req.body;
+
+    if (!userId || !playListName) {
+        return res.status(400).json({ message: "Wrong data provided" });
+    }
+
+    try {
+
+        const playList = await PlayList.findOne({ userId, playListName });
+
+        if (playList) {
+            return res.status(400).json({ message: `No PlayList found with ${userId} & ${playListName}` });
+        }
+
+        const newPlayList = new PlayList({
+            playListName: playListName,
+            userId: userId,
+        })
+        await newPlayList.save();
+
+        res.status(200).json({ message: `new Playlist created with ${playListName}`, newPlayList })
+
+    } catch (error) {
+        console.log("Internal Server Error,", error);
+        res.status(500).json({ message: "Internal Server Error in creating new Playlist" })
+    }
+}
+
+export const deletePlayList = async (req, res) => {
+    const { userId, playListName, playListId } = req.body;
+
+    if (!userId || !playListName || !playListId) {
+        return res.status(400).json({ message: "Wrong data provided" });
+    }
+
+    try {
+
+        const playList = await PlayList.deleteOne({ playListId });
+
+        if (!playList) {
+            return res.status(400).json({ message: `Cannot Delete PlayList` });
+        }
+
+        res.status(200).json({ message: `PlayList Successfully Deleted` })
+
+    } catch (error) {
+        console.log("Internal Server Error,", error);
+        res.status(500).json({ message: "Internal Server Error in Deleting playlist" })
     }
 }
