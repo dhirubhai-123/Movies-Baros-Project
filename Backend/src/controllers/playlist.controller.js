@@ -128,7 +128,7 @@ export const createPlayList = async (req, res) => {
         const playList = await PlayList.findOne({ userId, playListName });
 
         if (playList) {
-            return res.status(400).json({ message: `No PlayList found with ${userId} & ${playListName}` });
+            return res.status(400).json({ message: `PlayList Already Exists with userId-${userId} & Name-${playListName}` });
         }
 
         const newPlayList = new PlayList({
