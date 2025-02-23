@@ -105,7 +105,7 @@ export const giveShowsForHome = async (req, res) => {
 export const giveShowsByIds = async (req, res) => {
     try {
         const { showIds } = req.body;
-        console.log(showIds);
+        // console.log(showIds);
 
         const showsByIds = await Show.find({ '_id': { $in: showIds } });
 

@@ -6,8 +6,16 @@ import SearchBar from '../components/SearchBar';
 
 const Movies = () => {
 
-  const { getMoviesForHome, moviesForHome, sortFilter } = useAuthStore();
+  const { getMoviesForHome, moviesForHome, authUser, addToPlayList, getAllPlayLists, playLists } = useAuthStore();
   const [loading, updateLoading] = useState(false);
+  const [userSelectedPlayList, updateUserSelectedPlayList] = useState(false);
+  const [userSelectedPlayListName, updateUserSelectedPlayListName] = useState('');
+  const [movieId, updateMovieId] = useState(null);
+
+  // const handleChange = (e) => {
+  //   updateUserSelectedPlayListName(e.target.value);
+  // }
+
   // const sort = []
 
   useEffect(() => {
@@ -16,7 +24,11 @@ const Movies = () => {
       updateLoading(true);
 
       async function func() {
-        await getMoviesForHome();
+        if (authUser) {
+          const userId = authUser._id;
+          await getMoviesForHome();
+          await getAllPlayLists({ userId })
+        }
         // console.log(moviesForHome, dramaMovies)
       }
       func();
@@ -36,6 +48,24 @@ const Movies = () => {
   const handleMovieCardClick = (movieId) => {
     window.open(`/moviedetails/${movieId}`, '_blank');
   }
+
+  const handleAddToPlayList = (movieId, userSelectedPlayListName) => {
+    const type = "movie";
+    if (userSelectedPlayList && userSelectedPlayListName.trim() !== '') { // Fixed condition here
+      const func = async () => {
+        if (authUser) {
+          const userId = authUser._id;
+          // Uncomment when ready to call the addToPlayList function
+          await addToPlayList({ userId, type, mediaId: movieId, playListName: userSelectedPlayListName });
+          console.log("Adding to Playlist:", userId, type, movieId, userSelectedPlayListName);
+        }
+      };
+      func();
+    } else {
+      console.error("Playlist name is empty or invalid.");
+    }
+  };
+
 
   if (!moviesForHome || loading) {
     return (<LoaderComponent />)
@@ -65,6 +95,82 @@ const Movies = () => {
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+
+          {/* These section will be shown when user clicks on Add to playlist button */}
+          {userSelectedPlayList && (
+            <div
+              data-dialog-backdrop="web-3-modal"
+              data-dialog-backdrop-close="true"
+              className="fixed inset-0 z-[999] grid h-full w-full place-items-center bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300 overflow-scroll"
+            >
+              <div
+                className="relative m-4 rounded-lg bg-white shadow-sm"
+                data-dialog="web-3-modal"
+              >
+                <div className="flex items-start justify-between p-4">
+                  <div>
+                    <h5 className="text-xl font-medium text-slate-800">
+                      Select Playlist
+                    </h5>
+                  </div>
+                  <button
+                    data-ripple-dark="true"
+                    data-dialog-close="true"
+                    className="relative h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-blue-gray-500 transition-all hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                    type="button"
+                  >
+                    <span
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform"
+                      onClick={() => updateUserSelectedPlayList(false)}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="h-5 w-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        ></path>
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+                <div className="relative px-4">
+                  <div className="mb-6 grid grid-cols-1 md:grid-col-2 lg:grid-cols-3">
+                    {
+                      playLists && playLists.map((item, index) => {
+                        return (
+                          <button
+                            className="w-full mt-3 rounded-md flex items-center justify-center border border-slate-300 py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            type="button"
+                            key={index}
+                            onClick={() => {
+                              updateUserSelectedPlayList(false);
+                              updateUserSelectedPlayListName(item.playListName);
+                              if (movieId) {
+                                // console.log("From playLists button", movieId, authUser._id, item.playListName, "movie");
+                                handleAddToPlayList(movieId, item.playListName);
+                              }
+                            }}
+                          >
+                            {item.playListName}
+                          </button>
+
+                        )
+                      })
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+
           {
             moviesForHome.map((item, index) => (
               <div key={index} className="card bg-base-100 shadow-xl transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:cursor-pointer" onClick={() => handleMovieCardClick(item._id)}>
@@ -79,6 +185,7 @@ const Movies = () => {
                       <PlayCircle size={24}
                         onClick={(e) => {
                           e.stopPropagation();
+                          updateUserSelectedPlayList(true);
                           roundButtonClicked(item.movieTrailer)
                         }
                         }
@@ -92,7 +199,12 @@ const Movies = () => {
                       {item.movieName}
                       <div className="badge badge-secondary">{item.movieVerdict}</div>
                     </h2>
-                    <button className="btn btn-ghost btn-sm">
+                    <button className="btn btn-ghost btn-sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        updateUserSelectedPlayList(true);
+                        updateMovieId(item._id);
+                      }}>
                       <Heart size={20} className="text-red-500" />
                     </button>
                   </div>
@@ -119,7 +231,7 @@ const Movies = () => {
           }
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

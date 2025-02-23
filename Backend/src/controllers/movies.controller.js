@@ -131,7 +131,7 @@ export const giveMoviesForHome = async (req, res) => {
 export const giveMoviesByIds = async (req, res) => {
     try {
         const { movieIds } = req.body;
-        console.log(movieIds);
+        // console.log(movieIds);
 
         const moviesByIds = await Movie.find({ '_id': { $in: movieIds } });
 

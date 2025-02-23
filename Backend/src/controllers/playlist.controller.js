@@ -73,6 +73,10 @@ export const givePlayListContent = async (req, res) => {
     let moviesInPlayList = [];
     let showsInPlayList = [];
 
+    if(!userId || !playListName || !playListId){
+        return res.status(400).json({message:`wrong data provided!`})
+    }
+
     try {
         const playList = await PlayList.findOne({
             playListName,

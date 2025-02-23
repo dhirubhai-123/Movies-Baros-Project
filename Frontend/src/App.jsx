@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom"
+import { Toaster } from 'react-hot-toast'
 
 import Login from "../src/pages/Login"
 import Signup from "../src/pages/Signup"
@@ -7,13 +8,12 @@ import BasicHomePage from './pages/BasicHomePage'
 import Favourites from './pages/Favourites'
 import AddMovie from './pages/AddMovie'
 import AddShow from './pages/AddShow'
-import { Toaster } from 'react-hot-toast'
 import MoviesDetails from './pages/MoviesDetails'
 import GenreWiseMoviesNShows from './pages/GenreWiseMoviesNShows'
 import ShowDetails from './pages/ShowDetails'
 import Movies from './pages/Movies'
 import Shows from './pages/Shows'
-import MoviesFromPlayList from "./components/MoviesFromPlayList"
+import MoviesFromPlayList from "./pages/MoviesFromPlayList"
 import PlayLists from "./pages/PlayLists"
 
 
@@ -34,8 +34,8 @@ function App() {
         <Route path="/favourites" element={<Favourites />} />
         <Route path="/moviedetails/:movieId" element={<MoviesDetails />} />
         <Route path="/showdetails/:showId" element={<ShowDetails />} />
-        <Route path="/playlist/:playListName" element={<MoviesFromPlayList />} />
         <Route path="/playlists" element={<PlayLists />} />
+        <Route path="/playlist/:playListName" element={<MoviesFromPlayList />} />
 
       </Routes>
       <Toaster />

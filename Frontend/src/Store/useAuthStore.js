@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { persist, createJSONStorage } from "zustand/middleware"
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -46,7 +46,18 @@ export const useAuthStore = create(
             movieSearchSuggestions: null,
             showSearchSuggestions: null,
 
+            playLists: null,
+            moviesFromPlayList: null,
+            showsFromPlayList: null,
+
+            moviesByIds: null,
+            showsByIds: null,
+
             // sortFilter: null,
+
+            // setSortFilter: (value) => {
+            //     set({ sortFilter: value });
+            // },
 
             signup: async (data, funct) => {
                 // console.log(BASE_URL)
@@ -89,6 +100,7 @@ export const useAuthStore = create(
                     // console.log(res.data);
                     toast.success("Logged Out Successfully", res.data);
                     set({ authUser: null });
+                    set({ playLists: null })
                     // Handle logout UI updates here
                 } catch (error) {
                     console.error(error.response.data.message);
@@ -96,10 +108,6 @@ export const useAuthStore = create(
                     set({ isLoggingIn: false });
                 }
             },
-
-            // setSortFilter: (value) => {
-            //     set({ sortFilter: value });
-            // },
 
             addMovie: async (data) => {
                 set({ isProcessing: true })
@@ -161,6 +169,36 @@ export const useAuthStore = create(
                 } catch (error) {
                     console.log("Something went wrong in getMoviesForHome, useAuthStore")
                     toast.error(error.response.data.message);
+                }
+            },
+
+            getMoviesByIds: async (data) => {
+                try {
+                    const res = await axios.post(`${BASE_URL}/api/movies/getMoviesByIds`, data, { withCredentials: true });
+
+                    if (res.data.moviesByIds) {
+                        toast.success(res.data.message);
+                        set({ moviesByIds: res.data.moviesByIds })
+                    }
+
+                } catch (error) {
+                    console.log("Something went wrong adding to playlist", error);
+                    toast.error(error.message);
+                }
+            },
+
+            getShowsByIds: async (data) => {
+                try {
+                    const res = await axios.post(`${BASE_URL}/api/shows/getShowsByIds`, data, { withCredentials: true });
+
+                    if (res.data.showsByIds) {
+                        toast.success(res.data.message);
+                        set({ showsByIds: res.data.showsByIds })
+                    }
+
+                } catch (error) {
+                    console.log("Something went wrong adding to playlist", error);
+                    toast.error(error.message);
                 }
             },
 
@@ -269,12 +307,123 @@ export const useAuthStore = create(
                     toast.error(error.response.data.message);
                     console.log(error);
                 }
+            },
+
+            createPlayList: async (data) => {
+                try {
+                    const res = await axios.post(`${BASE_URL}/api/playList/create-playlist`, data, { withCredentials: true });
+
+                    if (!res.data.newPlayList) {
+                        return toast.error(res.data.message);
+                    }
+
+                    // set({ playLists: res.data.newPlayList });
+
+                    toast.success(res.data.message);
+
+                } catch (error) {
+                    console.log("Something went wrong in creating playlist", error);
+                    toast.error(error.message);
+                }
+            },
+
+            removePlayList: async (data) => {
+
+                try {
+                    const res = await axios.delete(`${BASE_URL}/api/playList/delete-playlist`, data, { withCredentials: true });
+
+                    if (res.data?.success) {
+                        toast.success(res.data.message);
+                    }
+
+                } catch (error) {
+                    console.log("Something went wrong in removing playlist", error);
+                    toast.error(error.message);
+                }
+
+            },
+
+            getAllPlayLists: async (data) => {
+
+                try {
+                    const res = await axios.post(`${BASE_URL}/api/playList/all-playlists`, data, { withCredentials: true });
+
+                    if (res.data.allPlayLists) {
+                        set({ playLists: res.data.allPlayLists });
+                        // toast.success(res.data.message);
+                    }
+
+                } catch (error) {
+                    console.log("Something went wrong in getting playlist", error);
+                    toast.error(error.message);
+                }
+
+            },
+
+            getContentFromPlayList: async (data) => {
+
+                try {
+                    const { playListName } = data;
+                    const res = await axios.post(`${BASE_URL}/api/playList/showPlayList/${playListName}`, data, { withCredentials: true });
+
+                    if (res.data?.showsInPlayList && res.data?.moviesInPlayList) {
+                        set({ moviesFromPlayList: res.data.moviesInPlayList })
+                        set({ showsFromPlayList: res.data.showsInPlayList })
+                    }
+
+                } catch (error) {
+                    console.log("Something went wrong in getting playlist", error);
+                    toast.error(error.message);
+                }
+
+            },
+
+            addToPlayList: async (data) => {
+
+                try {
+                    const res = await axios.post(`${BASE_URL}/api/playList/add-to-playlist`, data, { withCredentials: true });
+
+                    if (res.data.playList) {
+                        toast.success(res.data.message);
+                        // set({playList})
+                    }
+
+                } catch (error) {
+                    console.log("Something went wrong adding to playlist", error);
+                    toast.error(error.message);
+                }
+            },
+
+            removeFromPlayList: async (data) => {
+                try {
+                    const res = await axios.post(`${BASE_URL}/api/playList/remove-from-playlist`, data, { withCredentials: true });
+
+                    if (res.data.playList) {
+                        toast.success(res.data.message);
+                    }
+
+                } catch (error) {
+                    console.log("Something went wrong in removing from playlist", error);
+                    toast.error(error.message);
+                }
             }
 
-        }), 
+        }),
+
         {
-            name: "authUser",
-            getStorage: () => localStorage,
-        }
+            name: "authUser", // Persist only the authUser key
+            getStorage: () => createJSONStorage(() => localStorage), // Use localStorage
+            partialize: (state) => ({ authUser: state.authUser, playLists: state.playLists, showsByIds: state.showsByIds, moviesByIds: state.moviesByIds }), // Only persist `authUser` key and playlists
+            migrate: (persistedState) => {
+                // If there's no persisted state, return the initial state
+                if (!persistedState) return { authUser: null, playLists: null, moviesByIds: null, showsByIds: null };
+
+                // If there is a persisted state, you can add any migration logic here.
+                return persistedState;
+            }
+        },
+
+
     )
+
 )
