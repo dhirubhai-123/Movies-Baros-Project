@@ -128,6 +128,24 @@ export const giveMoviesForHome = async (req, res) => {
     }
 }
 
+export const giveMoviesByIds = async (req, res) => {
+    try {
+        const { movieIds } = req.body;
+        console.log(movieIds);
+
+        const moviesByIds = await Movie.find({ '_id': { $in: movieIds } });
+
+        if (!moviesByIds) {
+            return res.status(400).json({ message: `Can't find moviesByIds` })
+        }
+
+        res.status(200).json({ message: `movie found with ${movieIds}`, moviesByIds })
+
+    } catch (error) {
+        console.log("Internal Serval Error, giveMoviesByIds", error);
+        res.status(500).json({ message: `Internal Server Error, getMovieByIds` })
+    }
+}
 
 export const addNewMovie = async (req, res) => {
     try {

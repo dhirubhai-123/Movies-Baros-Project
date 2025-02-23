@@ -10,5 +10,6 @@ showsRouter.get("/:genre", genreWiseShows);
 showsRouter.get("/showdetails/:showName", giveShowDetails);
 showsRouter.post("/addshow", checkIncomingShow, addNewShow);
 showsRouter.post("/getRelatedYoutubeVideos", getRelatedYoutubeVideos);
+showsRouter.post("/getShowsByIds", giveShowDetails)
 
 export default showsRouter;

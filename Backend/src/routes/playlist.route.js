@@ -7,7 +7,7 @@ playListRouter.post("/showPlayList/:playListName", givePlayListContent);
 playListRouter.post("/add-to-playlist", addToPlayList);
 playListRouter.post("/remove-from-playlist", removeFromPlayList);
 playListRouter.post("/all-playlists", giveAllPlayLists)
-playListRouter.post("create-playlist", createPlayList);
+playListRouter.post("/create-playlist", createPlayList);
 playListRouter.delete("/delete-playlist", deletePlayList)
 
 export default playListRouter;

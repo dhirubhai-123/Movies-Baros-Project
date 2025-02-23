@@ -24,7 +24,7 @@ export const addToPlayList = async (req, res) => {
 
         await playList.save();
 
-        res.status(200).json({ message: `${type} added in playlist` });
+        res.status(200).json({ message: `${type} added in playlist`, playList });
 
     } catch (error) {
         console.log("Internal Server Error,", error);
@@ -69,14 +69,15 @@ export const removeFromPlayList = async (req, res) => {
 
 export const givePlayListContent = async (req, res) => {
 
-    const { userId, playListName } = req.body;
+    const { userId, playListName, playListId } = req.body;
     let moviesInPlayList = [];
     let showsInPlayList = [];
 
     try {
-        const playList = await PlayList.find({
-            playListName: playListName,
-            userId: userId,
+        const playList = await PlayList.findOne({
+            playListName,
+            userId,
+            _id: playListId
         });
 
         if (!playList) {
@@ -160,7 +161,7 @@ export const deletePlayList = async (req, res) => {
             return res.status(400).json({ message: `Cannot Delete PlayList` });
         }
 
-        res.status(200).json({ message: `PlayList Successfully Deleted` })
+        res.status(200).json({ message: `PlayList Successfully Deleted`, success: true })
 
     } catch (error) {
         console.log("Internal Server Error,", error);
