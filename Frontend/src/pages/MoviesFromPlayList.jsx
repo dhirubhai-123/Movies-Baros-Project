@@ -9,7 +9,7 @@ const MoviesFromPlayList = () => {
     const { playListName } = useParams();
 
     const { authUser, getContentFromPlayList, showsFromPlayList, moviesFromPlayList,
-        getShowsByIds, getMoviesByIds, showsByIds, moviesByIds } = useAuthStore();
+        getShowsByIds, getMoviesByIds, showsByIds, moviesByIds, removeFromPlayList } = useAuthStore();
 
     useEffect(() => {
         console.log(showsFromPlayList, moviesFromPlayList)
@@ -37,6 +37,18 @@ const MoviesFromPlayList = () => {
     //     }
     //     func();
     // })
+
+    const handleClickRemoveMovie = (type, itemId) => {
+       
+        // type, userId, mediaId, playListName
+        if (authUser && type && itemId && playListName) {
+            const userId = authUser._id;
+            const func = async () => {
+                await removeFromPlayList({ playListName, type, userId, mediaId: itemId });
+            }
+            func();
+        }
+    }
 
 
     // useEffect(() => {
@@ -163,7 +175,14 @@ const MoviesFromPlayList = () => {
                                         <div className="flex items-center justify-between">
                                             <span className="text-3xl font-bold text-gray-900 dark:text-white">{`${item.movieRunTime} Mins ${item.movieVerdict}`}</span>
                                             <a href="#"
-                                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Remove</a>
+                                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const type = "movie"
+                                                    handleClickRemoveMovie(type, item._id);
+                                                }
+                                                }
+                                            >Remove</a>
                                         </div>
                                     </div>
                                 </div>
@@ -223,7 +242,14 @@ const MoviesFromPlayList = () => {
                                         <div className="flex items-center justify-between">
                                             <span className="text-3xl font-bold text-gray-900 dark:text-white">{`${item.showRunTime} mins ${item.showVerdict}`}</span>
                                             <a href="#"
-                                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Remove</a>
+                                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const type = "show"
+                                                    handleClickRemoveMovie(type, item._id);
+                                                }
+                                                }
+                                            >Remove</a>
                                         </div>
                                     </div>
                                 </div>
