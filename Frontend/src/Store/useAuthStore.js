@@ -343,6 +343,27 @@ export const useAuthStore = create(
 
             },
 
+            removeItemFromPlayListState: async (data) => {
+                const { type, mediaId } = data;
+                if (type && mediaId) {
+                    if (showsFromPlayList || moviesFromPlayList) {
+                        if (type === "movie") {
+                            const newMoviesPlayListState = moviesFromPlayList.filter((item) => {
+                                if (item !== mediaId) { return item }
+                                set({ moviesFromPlayList: newMoviesPlayListState });
+                            })
+                        } else if (type === "show") {
+                            const newShowsPlayListState = showsFromPlayList.filter((item) => {
+                                if (item !== mediaId) { return item }
+                                set({ showsFromPlayList: newShowsPlayListState })
+                            })
+                        }
+                    }
+                } else {
+                    return toast.error("no mediaId or type provided")
+                }
+            },
+
             getAllPlayLists: async (data) => {
 
                 try {
@@ -399,7 +420,13 @@ export const useAuthStore = create(
                     const res = await axios.post(`${BASE_URL}/api/playList/remove-from-playlist`, data, { withCredentials: true });
 
                     if (res.data.playList) {
-                        toast.success(res.data.message);
+                        if (data.type === "movie") {
+                            set({ moviesFromPlayList: res.data.playList });
+                            toast.success(res.data.message);
+                        } else if (data.type === "show") {
+                            set({ showsFromPlayList: res.data.playList });
+                            toast.success(res.data.message);
+                        }
                     }
 
                 } catch (error) {
@@ -413,10 +440,13 @@ export const useAuthStore = create(
         {
             name: "authUser", // Persist only the authUser key
             getStorage: () => createJSONStorage(() => localStorage), // Use localStorage
-            partialize: (state) => ({ authUser: state.authUser, playLists: state.playLists, showsByIds: state.showsByIds, moviesByIds: state.moviesByIds }), // Only persist `authUser` key and playlists
+            partialize: (state) => ({
+                authUser: state.authUser, playLists: state.playLists, showsByIds: state.showsByIds, moviesByIds: state.moviesByIds, showsFromPlayList: state.showsFromPlayList,
+                moviesFromPlayList: state.moviesFromPlayList
+            }), // Only persist `authUser` key and playlists
             migrate: (persistedState) => {
                 // If there's no persisted state, return the initial state
-                if (!persistedState) return { authUser: null, playLists: null, moviesByIds: null, showsByIds: null };
+                if (!persistedState) return { authUser: null, playLists: null, moviesByIds: null, showsByIds: null, showsFromPlayList: null, moviesFromPlayList: null };
 
                 // If there is a persisted state, you can add any migration logic here.
                 return persistedState;

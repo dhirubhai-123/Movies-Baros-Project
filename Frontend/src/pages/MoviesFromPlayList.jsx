@@ -9,23 +9,20 @@ const MoviesFromPlayList = () => {
     const { playListName } = useParams();
 
     const { authUser, getContentFromPlayList, showsFromPlayList, moviesFromPlayList,
-        getShowsByIds, getMoviesByIds, showsByIds, moviesByIds, removeFromPlayList } = useAuthStore();
+        getShowsByIds, getMoviesByIds, showsByIds, moviesByIds, removeFromPlayList, removeItemFromPlayListState } = useAuthStore();
 
     useEffect(() => {
         console.log(showsFromPlayList, moviesFromPlayList)
         if (showsFromPlayList && showsFromPlayList.length !== 0) {
             async function func() {
-                const showsFromPlayListString = showsFromPlayList.map((item) => item.toString());
-                await getShowsByIds({ showIds: showsFromPlayListString });
+                await getShowsByIds({ showIds: showsFromPlayList });
             }
             func();
         }
 
         if (moviesFromPlayList && moviesFromPlayList.length !== 0) {
-            console.log("movieIds:", moviesFromPlayList);
             async function func() {
-                const moviesFromPlayListString = moviesFromPlayList.map((item) => item.toString());
-                await getMoviesByIds({ movieIds: moviesFromPlayListString });
+                await getMoviesByIds({ movieIds: moviesFromPlayList });
             }
             func();
         }
@@ -39,7 +36,7 @@ const MoviesFromPlayList = () => {
     // })
 
     const handleClickRemoveMovie = (type, itemId) => {
-       
+
         // type, userId, mediaId, playListName
         if (authUser && type && itemId && playListName) {
             const userId = authUser._id;
