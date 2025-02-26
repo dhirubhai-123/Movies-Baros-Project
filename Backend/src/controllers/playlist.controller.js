@@ -8,30 +8,38 @@ export const addToPlayList = async (req, res) => {
     }
 
     try {
-
         const playList = await PlayList.findOne({ userId, playListName });
 
         if (!playList) {
             return res.status(400).json({ message: `No PlayList found with ${userId} & ${playListName}` });
-
         }
 
-        if (type === "show" && !playList.movieIds.includes(mediaId)) {
-            playList.showIds.push(mediaId);
-        } else if (type === "movie" && !playList.showIds.includes(mediaId)) {
-            playList.movieIds.push(mediaId);
+        if (type === "show") {
+            // Check for duplicate before adding to showIds
+            if (!playList.showIds.includes(mediaId)) {
+                playList.showIds.push(mediaId);
+            } else {
+                return res.status(400).json({ message: "This show is already in your playlist" });
+            }
+        } else if (type === "movie") {
+            // Check for duplicate before adding to movieIds
+            if (!playList.movieIds.includes(mediaId)) {
+                playList.movieIds.push(mediaId);
+            } else {
+                return res.status(400).json({ message: "This movie is already in your playlist" });
+            }
         }
 
         await playList.save();
 
-        res.status(200).json({ message: `${type} added in playlist`, playList });
+        res.status(200).json({ message: `${type} added to playlist`, playList });
 
     } catch (error) {
         console.log("Internal Server Error,", error);
-        res.status(500).json({ message: "Internal Server Error in Adding media into Playlist" })
+        res.status(500).json({ message: "Internal Server Error in Adding media into Playlist" });
     }
-
 }
+
 
 export const removeFromPlayList = async (req, res) => {
     const { type, userId, mediaId, playListName } = req.body;
@@ -40,7 +48,6 @@ export const removeFromPlayList = async (req, res) => {
     }
 
     try {
-
         const playList = await PlayList.findOne({ userId, playListName });
 
         if (!playList) {
@@ -48,24 +55,28 @@ export const removeFromPlayList = async (req, res) => {
         }
 
         if (type === "show") {
+            // Ensure we're returning the filtered result correctly
             playList.showIds = playList.showIds.filter(
-                (showId) => { showId.toString() !== mediaId.toString(); }
-            )
+                (showId) => showId.toString() !== mediaId.toString() // Return the condition
+            );
         } else if (type === "movie") {
+            // Ensure we're returning the filtered result correctly
             playList.movieIds = playList.movieIds.filter(
-                (movieId) => { movieId.toString() !== mediaId.toString(); }
-            )
+                (movieId) => movieId.toString() !== mediaId.toString() // Return the condition
+            );
         }
 
+        // Save the updated playlist
         await playList.save();
 
         res.status(200).json({ message: `${type} removed from playlist`, playList });
 
     } catch (error) {
         console.log("Internal Server Error,", error);
-        res.status(500).json({ message: "Internal Server Error, removing media from Playlist", playList })
+        res.status(500).json({ message: "Internal Server Error, removing media from Playlist" });
     }
 }
+
 
 export const givePlayListContent = async (req, res) => {
 
@@ -73,8 +84,8 @@ export const givePlayListContent = async (req, res) => {
     let moviesInPlayList = [];
     let showsInPlayList = [];
 
-    if(!userId || !playListName || !playListId){
-        return res.status(400).json({message:`wrong data provided!`})
+    if (!userId || !playListName || !playListId) {
+        return res.status(400).json({ message: `wrong data provided!` })
     }
 
     try {
