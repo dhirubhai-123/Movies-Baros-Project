@@ -177,7 +177,7 @@ export const useAuthStore = create(
                     const res = await axios.post(`${BASE_URL}/api/movies/getMoviesByIds`, data, { withCredentials: true });
 
                     if (res.data.moviesByIds) {
-                        toast.success(res.data.message);
+                        // toast.success(res.data.message);
                         set({ moviesByIds: res.data.moviesByIds })
                     }
 
@@ -192,7 +192,7 @@ export const useAuthStore = create(
                     const res = await axios.post(`${BASE_URL}/api/shows/getShowsByIds`, data, { withCredentials: true });
 
                     if (res.data.showsByIds) {
-                        toast.success(res.data.message);
+                        // toast.success(res.data.message);
                         set({ showsByIds: res.data.showsByIds })
                     }
 

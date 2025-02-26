@@ -3,12 +3,13 @@ import { useAuthStore } from '../Store/useAuthStore';
 import LoaderComponent from '../components/LoaderComponent';
 import { PlayCircle, Heart, Star } from 'lucide-react';
 import SearchBar from '../components/SearchBar';
+import toast from 'react-hot-toast';
 
 const Movies = () => {
 
   const { getMoviesForHome, moviesForHome, authUser, addToPlayList, getAllPlayLists, playLists } = useAuthStore();
   const [loading, updateLoading] = useState(false);
-  const [userSelectedPlayList, updateUserSelectedPlayList] = useState(false);
+  const [showPlayLists, updateShowPlayLists] = useState(false);
   const [userSelectedPlayListName, updateUserSelectedPlayListName] = useState('');
   const [movieId, updateMovieId] = useState(null);
 
@@ -23,15 +24,15 @@ const Movies = () => {
     try {
       updateLoading(true);
 
-      async function func() {
-        if (authUser) {
+      if (authUser) {
+        async function func() {
           const userId = authUser._id;
           await getMoviesForHome();
-          await getAllPlayLists({ userId })
+          await getAllPlayLists({ userId });
         }
         // console.log(moviesForHome, dramaMovies)
+        func();
       }
-      func();
     } catch (error) {
       toast.error(error.message);
     }
@@ -51,11 +52,11 @@ const Movies = () => {
 
   const handleAddToPlayList = (movieId, userSelectedPlayListName) => {
     const type = "movie";
-    if (userSelectedPlayList && userSelectedPlayListName.trim() !== '') { // Fixed condition here
+    if (showPlayLists && userSelectedPlayListName.trim() !== '') { // Fixed condition here
       const func = async () => {
         if (authUser) {
           const userId = authUser._id;
-          // Uncomment when ready to call the addToPlayList function
+
           await addToPlayList({ userId, type, mediaId: movieId, playListName: userSelectedPlayListName });
           console.log("Adding to Playlist:", userId, type, movieId, userSelectedPlayListName);
         }
@@ -63,6 +64,7 @@ const Movies = () => {
       func();
     } else {
       console.error("Playlist name is empty or invalid.");
+      return toast.error("Playlist name is empty or invalid.")
     }
   };
 
@@ -97,7 +99,7 @@ const Movies = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
 
           {/* These section will be shown when user clicks on Add to playlist button */}
-          {userSelectedPlayList && (
+          {showPlayLists && (
             <div
               data-dialog-backdrop="web-3-modal"
               data-dialog-backdrop-close="true"
@@ -121,7 +123,7 @@ const Movies = () => {
                   >
                     <span
                       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform"
-                      onClick={() => updateUserSelectedPlayList(false)}
+                      onClick={() => updateShowPlayLists(false)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +152,7 @@ const Movies = () => {
                             type="button"
                             key={index}
                             onClick={() => {
-                              updateUserSelectedPlayList(false);
+                              updateShowPlayLists(false);
                               updateUserSelectedPlayListName(item.playListName);
                               if (movieId) {
                                 // console.log("From playLists button", movieId, authUser._id, item.playListName, "movie");
@@ -185,7 +187,7 @@ const Movies = () => {
                       <PlayCircle size={24}
                         onClick={(e) => {
                           e.stopPropagation();
-                          updateUserSelectedPlayList(true);
+                          updateShowPlayLists(true);
                           roundButtonClicked(item.movieTrailer)
                         }
                         }
@@ -202,7 +204,7 @@ const Movies = () => {
                     <button className="btn btn-ghost btn-sm"
                       onClick={(e) => {
                         e.stopPropagation();
-                        updateUserSelectedPlayList(true);
+                        updateShowPlayLists(true);
                         updateMovieId(item._id);
                       }}>
                       <Heart size={20} className="text-red-500" />

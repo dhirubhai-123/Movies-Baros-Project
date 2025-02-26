@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 const MoviesFromPlayList = () => {
 
-    const [processing, updateProcessing] = useState(true);
+    const [processing, updateProcessing] = useState(false);
     const { playListName } = useParams();
 
     const { authUser, getContentFromPlayList, showsFromPlayList, moviesFromPlayList,
@@ -28,20 +28,20 @@ const MoviesFromPlayList = () => {
         }
     }, [showsFromPlayList, moviesFromPlayList]);
 
-    // useEffect(()=>{
-    //     const func = async () =>{
-    //         await getContentFromPlayList()
-    //     }
-    //     func();
-    // })
 
     const handleClickRemoveMovie = (type, itemId) => {
 
         // type, userId, mediaId, playListName
-        if (authUser && type && itemId && playListName) {
+        const decision = confirm(`Do you want to remove ${type}`);
+        if (authUser && type && itemId && playListName && decision) {
             const userId = authUser._id;
             const func = async () => {
                 await removeFromPlayList({ playListName, type, userId, mediaId: itemId });
+                setTimeout(() => {
+                    updateProcessing(true);
+                    window.location.reload();
+                }, 500)
+                updateProcessing(false);
             }
             func();
         }
@@ -62,9 +62,9 @@ const MoviesFromPlayList = () => {
         window.open(`/showdetails/${showId}`, '_blank');
     }
 
-    // if (processing) {
-    //     return <LoaderComponent />
-    // }
+    if (processing) {
+        return <LoaderComponent />
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-base-200 to-base-100">
@@ -87,10 +87,8 @@ const MoviesFromPlayList = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {/* these section will shows to user if there are no movies and shows in playlist. */}
                     {
-                        moviesFromPlayList &&
-                        showsFromPlayList &&
-                        moviesFromPlayList.length === 0 &&
-                        showsFromPlayList.length === 0 && (
+                        moviesFromPlayList && showsFromPlayList && showsByIds && moviesByIds && moviesFromPlayList.length === 0 && showsFromPlayList.length === 0 &&
+                        (
                             <div className="text-white text-center flex flex-col justify-center items-center font-serif">
                                 <div className="text-3xl text-slate-300 my-4">
                                     No Movies or Shows Found!
@@ -110,7 +108,7 @@ const MoviesFromPlayList = () => {
                                     <a
                                         href="/shows"
                                         className="hover:border-b hover:border-blue-500 hover:text-blue-500 transition duration-300
-                                        text-blue-300"
+                    text-blue-300"
                                     >
                                         Shows
                                     </a>
@@ -120,8 +118,9 @@ const MoviesFromPlayList = () => {
                     }
 
 
+
                     {
-                        moviesByIds && moviesByIds.length !== 0 &&
+                        moviesFromPlayList && showsFromPlayList && showsByIds && moviesByIds && moviesFromPlayList.length !== 0 && showsFromPlayList.length !== 0 &&
                         moviesByIds.map((item, index) => {
 
                             return (
@@ -189,7 +188,7 @@ const MoviesFromPlayList = () => {
                     }
 
                     {
-                        showsByIds && showsByIds.length > 0 &&
+                        moviesFromPlayList && showsFromPlayList && showsByIds && moviesByIds && moviesFromPlayList.length !== 0 && showsFromPlayList.length !== 0 &&
                         showsByIds.map((item, index) => {
                             return (
                                 <div className="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700"
@@ -197,7 +196,7 @@ const MoviesFromPlayList = () => {
                                     onClick={() => handleShowCardClick(item._id)}
                                 >
                                     <a href="#">
-                                        <img className="rounded-t-lg p-8" src="https://i.ibb.co/KqdgGY4/cosmetic-packaging-mockup-1150-40280.webp" alt="product image" />
+                                        <img className="rounded-t-lg p-8" src={`${item.showPoster}`} alt="product image" />
                                     </a>
                                     <div className="px-5 pb-5">
                                         <a href="#">
