@@ -15,9 +15,9 @@ const Login = () => {
     password: ""
   })
 
-  useEffect(() => {
-    console.log(authUser)
-  }, [])
+  // useEffect(() => {
+  //   console.log(authUser)
+  // }, [])
 
   const validateFormData = (formData) => {
 

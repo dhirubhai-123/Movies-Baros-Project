@@ -54,7 +54,7 @@ const BasicHomePage = () => {
         updateLoading(false);
       }, 500)
     }
-    console.log(authUser)
+    // console.log(authUser)
   }, [authUser])
 
   useEffect(() => {

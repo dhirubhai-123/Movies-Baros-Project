@@ -41,7 +41,7 @@ const Shows = () => {
                     const userId = authUser._id;
                     
                     await addToPlayList({ userId, type, mediaId: showId, playListName: userSelectedPlayListName });
-                    console.log("Adding to Playlist:", userId, type, showId, userSelectedPlayListName);
+                    // console.log("Adding to Playlist:", userId, type, showId, userSelectedPlayListName);
                 }
             };
             func();

@@ -18,7 +18,7 @@ const ScrollableCarousel = ({ mostRatedGoats, handleCardClick }) => {
     };
 
     useEffect(() => {
-        console.log("most rated goats from Scrollable carousel", mostRatedGoats);
+        // console.log("most rated goats from Scrollable carousel", mostRatedGoats);
         const interval = setInterval(() => {
             scrollRight();
         }, 1000);

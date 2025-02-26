@@ -12,7 +12,7 @@ const MoviesFromPlayList = () => {
         getShowsByIds, getMoviesByIds, showsByIds, moviesByIds, removeFromPlayList, removeItemFromPlayListState } = useAuthStore();
 
     useEffect(() => {
-        console.log(showsFromPlayList, moviesFromPlayList)
+        // console.log(showsFromPlayList, moviesFromPlayList)
         if (showsFromPlayList && showsFromPlayList.length !== 0) {
             async function func() {
                 await getShowsByIds({ showIds: showsFromPlayList });

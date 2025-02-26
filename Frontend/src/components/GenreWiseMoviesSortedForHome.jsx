@@ -7,19 +7,19 @@ const GenreWiseMoviesSortedForHome = ({ genreName, movies, handleCardClick }) =>
 
     const navigate = useNavigate();
 
-    const scrollLeft = () => {
-        scrollRef.current.scrollBy({
-            left: -300, // Adjust scroll distance as needed
-            behavior: 'smooth',
-        });
-    };
+    // const scrollLeft = () => {
+    //     scrollRef.current.scrollBy({
+    //         left: -300, // Adjust scroll distance as needed
+    //         behavior: 'smooth',
+    //     });
+    // };
 
-    const scrollRight = () => {
-        scrollRef.current.scrollBy({
-            left: 300, // Adjust scroll distance as needed
-            behavior: 'smooth',
-        });
-    };
+    // const scrollRight = () => {
+    //     scrollRef.current.scrollBy({
+    //         left: 300, // Adjust scroll distance as needed
+    //         behavior: 'smooth',
+    //     });
+    // };
 
     return (
         <div className='w-full px-2 py-2'>

@@ -58,7 +58,7 @@ const Movies = () => {
           const userId = authUser._id;
 
           await addToPlayList({ userId, type, mediaId: movieId, playListName: userSelectedPlayListName });
-          console.log("Adding to Playlist:", userId, type, movieId, userSelectedPlayListName);
+          // console.log("Adding to Playlist:", userId, type, movieId, userSelectedPlayListName);
         }
       };
       func();
