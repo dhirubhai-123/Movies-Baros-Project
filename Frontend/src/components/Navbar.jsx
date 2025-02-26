@@ -69,7 +69,7 @@ const Navbar = () => {
                     <li><a onClick={() => navigate(`/movies`)} className='hover:text-red-400 duration-500'>Movies</a></li>
                     <li>
                         <details>
-                            <summary className='hover:text-red-400 duration-500'>Parent</summary>
+                            <summary className='hover:text-red-400 duration-500'>PlayList</summary>
                             <ul className="p-2">
                                 <li><a className='hover:text-red-400 duration-500'
                                     onClick={() => navigate('/playlists')}
