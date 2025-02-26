@@ -5,7 +5,6 @@ import Login from "../src/pages/Login"
 import Signup from "../src/pages/Signup"
 import Profile from "../src/pages/Profile"
 import BasicHomePage from './pages/BasicHomePage'
-import Favourites from './pages/Favourites'
 import AddMovie from './pages/AddMovie'
 import AddShow from './pages/AddShow'
 import MoviesDetails from './pages/MoviesDetails'
@@ -31,7 +30,6 @@ function App() {
         <Route path="/movies" element={<Movies />} />
         <Route path="/shows" element={<Shows />} />
         <Route path='/movies/:genre' element={<GenreWiseMoviesNShows />} />
-        <Route path="/favourites" element={<Favourites />} />
         <Route path="/moviedetails/:movieId" element={<MoviesDetails />} />
         <Route path="/showdetails/:showId" element={<ShowDetails />} />
         <Route path="/playlists" element={<PlayLists />} />
