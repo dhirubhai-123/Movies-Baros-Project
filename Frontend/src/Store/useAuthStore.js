@@ -11,10 +11,10 @@ export const useAuthStore = create(
         (set, get) => ({
 
             authUser: null,
-            isSigningUp: false,
-            isLoggingIn: false,
-            isLoggingOut: false,
-            isProcessing: false,
+            isAuthenticated: false,
+
+            authAdmin: null,
+            isAdminAuthenticated: false,
 
             moviesForHome: [],
             dramaMovies: [],
@@ -61,46 +61,82 @@ export const useAuthStore = create(
 
             signup: async (data, funct) => {
                 // console.log(BASE_URL)
-                set({ isSigningUp: true });
                 try {
                     console.log(data)
                     const res = await axios.post(`${BASE_URL}/api/auth/signup`, data, { withCredentials: true });
-                    console.log(res.data);
+                    // console.log(res.data);
                     set({ authUser: res.data });
 
                     toast.success("Account created successfully", res.data);
                     funct('/login')
                 } catch (error) {
                     toast.error(error.response.data.message);
-                } finally {
-                    set({ isSigningUp: false });
                 }
             },
 
             login: async (data, funct) => {
-                set({ isLoggingIn: true });
                 try {
                     const res = await axios.post(`${BASE_URL}/api/auth/login`, data, { withCredentials: true });
-                    console.log(res.data);
-                    set({ authUser: res.data });
+                    // console.log(res.data);
+                    set({ authUser: res.data, isAuthenticated: true });
                     toast.success(`${res.data.fullName} logged in successfully`);
                     funct('/')
                 } catch (error) {
                     toast.error(error.response.data.message);
                     // console.log(error)
-                } finally {
-                    set({ isLoggingIn: false });
                 }
             },
 
             logout: async () => {
-                set({ isLoggingOut: true })
                 try {
                     const res = await axios.get(`${BASE_URL}/api/auth/logout`, { withCredentials: true });
                     // console.log(res.data);
-                    toast.success("Logged Out Successfully", res.data);
-                    set({ authUser: null });
+                    set({ authUser: null, isAuthenticated: false });
                     set({ playLists: null })
+                    toast.success("Logged Out Successfully", res.data);
+                    // Handle logout UI updates here
+                } catch (error) {
+                    console.error(error.response.data.message);
+                }
+            },
+
+            adminSignup: async (data, funct) => {
+                try {
+                    // console.log(data)
+                    const res = await axios.post(`${BASE_URL}/api/admin/admin-signup`, data, { withCredentials: true });
+                    // console.log(res.data);
+                    if (res.data.success === true) {
+                        funct('/admin/admin-login');
+                        toast.success(`Admin created with ${res.data.fullName}`);
+                    }
+
+                } catch (error) {
+                    toast.error(error.response.data.message);
+                }
+            },
+
+            adminLogin: async (data, funct) => {
+                try {
+                    const res = await axios.post(`${BASE_URL}/api/admin/admin-login`, data, { withCredentials: true });
+                    if (res.data.success) {
+                        set({ authAdmin: res.data, isAdminAuthenticated: true });
+                        toast.success(`${res.data.fullName} logged in successfully`);
+                        funct('/admin/admin-panel');
+                    }
+                } catch (error) {
+                    toast.error(error.message);
+                    // console.log(error)
+                }
+            },
+
+            adminLogout: async () => {
+                set({ isLoggingOut: true })
+                try {
+                    const res = await axios.get(`${BASE_URL}/api/admin/admin-logout`, { withCredentials: true });
+                    // console.log(res.data);
+                    set({ authAdmin: null, isAdminAuthenticated: false });
+                    toast.success("Logged Out Successfully", res.data);
+
                     // Handle logout UI updates here
                 } catch (error) {
                     console.error(error.response.data.message);
@@ -441,14 +477,31 @@ export const useAuthStore = create(
             name: "authUser", // Persist only the authUser key
             getStorage: () => createJSONStorage(() => localStorage), // Use localStorage
             partialize: (state) => ({
-                authUser: state.authUser, playLists: state.playLists, showsByIds: state.showsByIds, moviesByIds: state.moviesByIds, showsFromPlayList: state.showsFromPlayList,
-                moviesFromPlayList: state.moviesFromPlayList
-            }), // Only persist `authUser` key and playlists
+                authUser: state.authUser,
+                playLists: state.playLists,
+                showsByIds: state.showsByIds,
+                moviesByIds: state.moviesByIds,
+                showsFromPlayList: state.showsFromPlayList,
+                moviesFromPlayList: state.moviesFromPlayList,
+                isAuthenticated: state.isAuthenticated,
+                isAdminAuthenticated: state.isAdminAuthenticated,
+                authAdmin: state.authAdmin,
+            }),
             migrate: (persistedState) => {
                 // If there's no persisted state, return the initial state
-                if (!persistedState) return { authUser: null, playLists: null, moviesByIds: null, showsByIds: null, showsFromPlayList: null, moviesFromPlayList: null };
+                if (!persistedState) return {
+                    authUser: null,
+                    playLists: null,
+                    moviesByIds: null,
+                    showsByIds: null,
+                    showsFromPlayList: null,
+                    moviesFromPlayList: null,
+                    isAdminAuthenticated: null,
+                    isAuthenticated: null,
+                    authAdmin: null,
+                };
 
-                // If there is a persisted state, you can add any migration logic here.
+                // If there is a persisted state, return new.
                 return persistedState;
             }
         },

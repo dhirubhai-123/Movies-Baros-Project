@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser"
 // import { seedMovies } from "./src/seeds/movie.seed.js"
 import searchRouter from "./src/routes/search.route.js"
 import playListRouter from "./src/routes/playlist.route.js"
+import adminRouter from "./src/routes/authAdmin.route.js"
 
 //Middlewares 
 dotenv.config()
@@ -45,6 +46,7 @@ app.use("/api/movies", moviesRouter);
 app.use("/api/shows", showsRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/playList", playListRouter);
+app.use("/api/admin", adminRouter);
 
 
 app.listen(port, () => {

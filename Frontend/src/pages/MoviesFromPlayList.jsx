@@ -48,6 +48,7 @@ const MoviesFromPlayList = () => {
     }
 
 
+
     // useEffect(() => {
     //     console.log("useEffect", moviesByIds, showsByIds)
     // }, [moviesByIds, showsByIds])
@@ -87,7 +88,9 @@ const MoviesFromPlayList = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {/* these section will shows to user if there are no movies and shows in playlist. */}
                     {
-                        moviesFromPlayList && showsFromPlayList && showsByIds && moviesByIds && moviesFromPlayList.length === 0 && showsFromPlayList.length === 0 &&
+                        // moviesFromPlayList && showsFromPlayList && 
+                        showsFromPlayList && moviesFromPlayList &&
+                        moviesFromPlayList.length === 0 && showsFromPlayList.length === 0 &&
                         (
                             <div className="text-white text-center flex flex-col justify-center items-center font-serif">
                                 <div className="text-3xl text-slate-300 my-4">
@@ -120,7 +123,7 @@ const MoviesFromPlayList = () => {
 
 
                     {
-                        moviesFromPlayList && showsFromPlayList && showsByIds && moviesByIds && moviesFromPlayList.length !== 0 && showsFromPlayList.length !== 0 &&
+                        moviesByIds && moviesByIds.length !== 0 &&
                         moviesByIds.map((item, index) => {
 
                             return (
@@ -188,7 +191,7 @@ const MoviesFromPlayList = () => {
                     }
 
                     {
-                        moviesFromPlayList && showsFromPlayList && showsByIds && moviesByIds && moviesFromPlayList.length !== 0 && showsFromPlayList.length !== 0 &&
+                        showsByIds && showsByIds.length !== 0 &&
                         showsByIds.map((item, index) => {
                             return (
                                 <div className="bg-white shadow-md rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700"
