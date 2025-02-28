@@ -3,7 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware"
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://movies-baros-backend.onrender.com/";
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5000" : "https://movies-baros-project-backend.onrender.com/";
 
 
 export const useAuthStore = create(
